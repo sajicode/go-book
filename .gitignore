@@ -65,3 +65,6 @@ go-book
 
 # uploaded images
 images/**
+
+# server logs
+logrus.log
