@@ -7,6 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/sajicode/go-book/email"
 	"github.com/sajicode/go-book/logger"
 	"github.com/sajicode/go-book/models"
 )
@@ -30,6 +31,9 @@ func main() {
 	password := os.Getenv("DB_PASSWORD")
 	dbname := os.Getenv("DB_NAME")
 	dbDriver := os.Getenv("DB_DRIVER")
+	mgDomain := os.Getenv("MG_DOMAIN")
+	mgAPIKey := os.Getenv("MG_API_KEY")
+	mgPublicKey := os.Getenv("MG_PUBLIC_KEY")
 
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 
@@ -41,6 +45,15 @@ func main() {
 	// services.DestructiveReset()
 
 	services.AutoMigrate()
+
+	// use emailer
+	emailer := email.NewClient(
+		email.WithSender("Literary Support", "support@literaryreviews.co"),
+		email.WithMailgun(mgDomain, mgAPIKey, mgPublicKey),
+	)
+
+	// mock usage to prevent errors
+	_ = emailer
 
 	r := mux.NewRouter()
 
