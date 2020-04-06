@@ -31,6 +31,7 @@ func NewBookService(db *gorm.DB) BookService {
 	}
 }
 
+// BookService interface
 type BookService interface {
 	BookDB
 }

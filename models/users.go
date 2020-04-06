@@ -3,9 +3,12 @@ package models
 import (
 	"regexp"
 	"time"
+	"os"
+	"strings"
 
 	"github.com/jinzhu/gorm"
 	"github.com/sajicode/go-book/hash"
+	"github.com/sajicode/go-book/rand"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -51,7 +54,7 @@ type UserDB interface {
 	Create(user *User) (*User, error)
 	Update(user *User) (*User, error)
 	Delete(id uint) error
-	AllUsers(limit, page, int) ([]User, error)
+	AllUsers(limit, page int) ([]User, error)
 }
 
 // UserService is a set of methods used to manipulate and
@@ -153,7 +156,7 @@ func (us *userService) CompleteReset(token, newPw string) (*User, error) {
 		return nil, err
 	}
 	user.Password = newPw
-	updatedUser, err = us.Update(user)
+	updatedUser, err := us.Update(user)
 	if err != nil {
 		return nil, err
 	}
@@ -233,7 +236,7 @@ func (uv *userValidator) Create(user *User) (*User, error) {
 		uv.emailFormat,
 		uv.emailIsAvail)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	return uv.UserDB.Create(user)
 }
@@ -253,7 +256,7 @@ func (uv *userValidator) Update(user *User) (*User, error) {
 		uv.emailFormat,
 		uv.emailIsAvail)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	return uv.UserDB.Update(user)
 }

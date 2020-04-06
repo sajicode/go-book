@@ -112,7 +112,7 @@ func (rv *reviewValidator) reviewNotesRequired(r *Review) error {
 	return nil
 }
 
-var _ reviewDB = &reviewGorm{}
+var _ ReviewDB = &reviewGorm{}
 
 // reviewGorm struct takes in the database
 type reviewGorm struct {
@@ -132,7 +132,7 @@ func (rg *reviewGorm) Create(review *Review) (*Review, error) {
 	// review.User = User{}
 	err := rg.db.Create(&review).Error
 	if err != nil {
-		return &review{}, err
+		return nil, err
 	}
 	return review, nil
 }
@@ -141,20 +141,20 @@ func (rg *reviewGorm) Create(review *Review) (*Review, error) {
 func (rg *reviewGorm) Update(review *Review) (*Review, error) {
 	err := rg.db.Save(&review).Error
 	if err != nil {
-		return &review{}, err
+		return nil, err
 	}
 	return review, nil
 }
 
 // Delete will delete the review with the provided ID
 func (rg *reviewGorm) Delete(id uint) error {
-	review := review{Model: gorm.Model{ID: id}}
+	review := Review{Model: gorm.Model{ID: id}}
 	return rg.db.Delete(&review).Error
 }
 
 // ByUserID fetches all reviews by a user
-func (rg *reviewGorm) ByUserID(userID uint) ([]review, error) {
-	var reviews []review
+func (rg *reviewGorm) ByUserID(userID uint) ([]Review, error) {
+	var reviews []Review
 	err := rg.db.Where("user_id = ?", userID).Find(&reviews).Error
 	if err != nil {
 		return nil, err
@@ -163,8 +163,8 @@ func (rg *reviewGorm) ByUserID(userID uint) ([]review, error) {
 }
 
 // ByBookID fetches all reviews for a book
-func (rg *reviewGorm) ByBookID(bookID uint) ([]review, error) {
-	var reviews []review
+func (rg *reviewGorm) ByBookID(bookID uint) ([]Review, error) {
+	var reviews []Review
 	err := rg.db.Where("book_id = ?", bookID).Find(&reviews).Error
 	if err != nil {
 		return nil, err
