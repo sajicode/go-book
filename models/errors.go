@@ -64,6 +64,9 @@ const (
 	// ErrBookIDRequired is returned when a user ID is not passed in for comment creation
 	ErrBookIDRequired privateError = "models: book ID is required"
 
+	// ErrInvalidRequest is returned when the required parameters are not passed while creating a model
+	ErrInvalidRequest privateError = "models: request is incomplete/invalid"
+
 	// ErrReviewRequired is returned when a review note is not passed in for comment creation
 	ErrReviewRequired privateError = "models: review note is required"
 

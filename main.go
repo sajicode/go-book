@@ -7,6 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/sajicode/go-book/controllers"
 	"github.com/sajicode/go-book/email"
 	"github.com/sajicode/go-book/logger"
 	"github.com/sajicode/go-book/models"
@@ -53,13 +54,20 @@ func main() {
 	)
 
 	// mock usage to prevent errors
-	_ = emailer
+	// _ = emailer
 
 	r := mux.NewRouter()
 
+	usersController := controllers.NewUsers(services.User, *emailer)
+
 	// Non-existent pages
 	r.NotFoundHandler = http.HandlerFunc(notFound)
+
+	// index page
 	r.HandleFunc("/", hello).Methods("GET")
+
+	// user routes
+	r.HandleFunc("/users/signup", usersController.Create).Methods("POST")
 
 	appPort := fmt.Sprintf(":%s", os.Getenv("APP_PORT"))
 	fmt.Println("Starting Server on PORT " + appPort)
