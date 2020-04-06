@@ -34,7 +34,7 @@ func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
 	user := &models.User{}
 	err := json.NewDecoder(r.Body).Decode(user)
 	if err != nil {
-		util.Respond(w, util.Message(false, string(models.ErrInvalidRequest)))
+		util.Respond(w, util.Fail("fail", err.Error()))
 		slogger.InvalidRequest(string(models.ErrInvalidRequest))
 		return
 	}
@@ -42,9 +42,10 @@ func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
 	response, err := u.us.Create(user)
 	if err != nil {
 		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
-		util.Respond(w, util.Message(false, string(models.ErrInvalidRequest)))
+		util.Respond(w, util.Fail("fail", err.Error()))
 		return
 	}
-	util.Respond(w, response)
+	util.Respond(w, util.Success("success", response))
 }

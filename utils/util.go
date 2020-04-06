@@ -5,9 +5,14 @@ import (
 	"net/http"
 )
 
-// Message returns a formatted message to the client
-func Message(status bool, message string) map[string]interface{} {
+// Fail returns a formatted error response to the client
+func Fail(status string, message string) map[string]interface{} {
 	return map[string]interface{}{"status": status, "message": message}
+}
+
+// Message returns a formatted success response to the client
+func Success(status string, data interface{}) map[string]interface{} {
+	return map[string]interface{}{"status": status, "data": data}
 }
 
 // Respond returns a formatted http response to the client
