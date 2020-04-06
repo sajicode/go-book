@@ -20,15 +20,18 @@ var hmacSecretKey = os.Getenv("HMAC_SECRET_KEY")
 // address and a password so users can log in and gain
 // access to their content.
 type User struct {
-	gorm.Model
+	ID         uint    `gorm:"primary_key;auto_increment" json:"id"`
 	Avatar string `gorm:"size:255;null;DEFAULT:'https://res.cloudinary.com/sajicode/image/upload/v1549973773/avatar.png'" json:"avatar"`
 	FirstName	string `gorm:"size:255;not null" json:"first_name"`
 	LastName	string `gorm:"size:255;not null" json:"last_name"`
 	Email	string `gorm:"not null;unique_index" json:"email"`
-	Password     string `gorm:"-"`
+	Password     string `gorm:"-" json:"password"`
 	PasswordHash string `gorm:"not null" json:"password_hash"`
-	Remember     string `gorm:"-"`
+	Remember     string `gorm:"-" json:"remember"`
 	RememberHash string `gorm:"not null;unique_index" json:"remember_hash"`
+	CreatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+	DeletedAt  *time.Time `gorm:"default:NULL" json:"deleted_at"`
 	Books	[]Book `gorm:"-" json:"books"`
 	Reviews []Review `gorm:"-" json:"reviews"`
 }
@@ -493,7 +496,7 @@ func (ug *userGorm) Update(user *User) (*User, error) {
 
 // Delete will delete the user with the provided ID
 func (ug *userGorm) Delete(id uint) error {
-	user := User{Model: gorm.Model{ID: id}}
+	user := User{ID: id}
 	return ug.db.Delete(&user).Error
 }
 

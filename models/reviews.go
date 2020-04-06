@@ -1,14 +1,20 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import (
+	"time"
+	"github.com/jinzhu/gorm"
+)
 
 // Review struct represents the structure of our reviews in the DB
 type Review struct {
-	gorm.Model
+	ID        uint      `gorm:"primary_key;auto_increment" json:"id"`
 	UserID uint   `gorm:"not_null;index;auto_preload" json:"user_id"`
 	User   User   `gorm:"-" json:"user"`
 	BookID uint   `gorm:"not_null;index" json:"book_id"`
 	notes  string `gorm:"not_null" json:"notes"`
+	CreatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+	DeletedAt  *time.Time `gorm:"default:NULL" json:"deleted_at"`
 }
 
 // ReviewDB interface
@@ -148,7 +154,7 @@ func (rg *reviewGorm) Update(review *Review) (*Review, error) {
 
 // Delete will delete the review with the provided ID
 func (rg *reviewGorm) Delete(id uint) error {
-	review := Review{Model: gorm.Model{ID: id}}
+	review := Review{ID: id}
 	return rg.db.Delete(&review).Error
 }
 

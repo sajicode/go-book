@@ -1,17 +1,24 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import (
+	"time"
+
+	"github.com/jinzhu/gorm"
+)
 
 // Book struct represents the DB structure of our Books
 type Book struct {
-	gorm.Model
-	UserID   uint     `gorm:"not_null;index;auto_preload" json:"user_id"`
-	Title    string   `gorm: "not_null" json:"title"`
-	Author   string   `gorm: "not_null" json:"author"`
-	Category string   `gorm: "not_null" json:"category"`
-	Summary  string   `gorm: "not_null" json:"summary"`
-	Image    string   `gorm: "not_null" json:"image"`
-	reviews  []Review `gorm:"-" json:"reviews"`
+	ID        uint       `gorm:"primary_key;auto_increment" json:"id"`
+	UserID    uint       `gorm:"not_null;index;auto_preload" json:"user_id"`
+	Title     string     `gorm: "not_null" json:"title"`
+	Author    string     `gorm: "not_null" json:"author"`
+	Category  string     `gorm: "not_null" json:"category"`
+	Summary   string     `gorm: "not_null" json:"summary"`
+	Image     string     `gorm: "not_null" json:"image"`
+	CreatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+	DeletedAt *time.Time `gorm:"default:NULL" json:"deleted_at"`
+	reviews   []Review   `gorm:"-" json:"reviews"`
 }
 
 // BookDB interface
@@ -182,7 +189,7 @@ func (bg *bookGorm) Update(book *Book) (*Book, error) {
 
 // Delete will delete the book with the provided ID
 func (bg *bookGorm) Delete(id uint) error {
-	book := Book{Model: gorm.Model{ID: id}}
+	book := Book{ID: id}
 	return bg.db.Delete(&book).Error
 }
 
