@@ -6,6 +6,7 @@ import (
 
 	"github.com/sajicode/go-book/email"
 	"github.com/sajicode/go-book/logger"
+	"github.com/sajicode/go-book/rand"
 	"github.com/sajicode/go-book/models"
 	util "github.com/sajicode/go-book/utils"
 )
@@ -27,7 +28,6 @@ func NewUsers(us models.UserService, emailer email.Client) *Users {
 	}
 }
 
-
 // Create a new user
 // POST /users/signup
 func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
@@ -39,7 +39,7 @@ func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response, err := u.us.Create(user)
+	newUser, err := u.us.Create(user)
 	if err != nil {
 		slogger.InvalidRequest(err.Error())
 		w.Header().Add("Content-Type", "application/json")
@@ -47,11 +47,20 @@ func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
 		util.Respond(w, util.Fail("fail", err.Error()))
 		return
 	}
-	err = u.emailer.Welcome(response.FirstName, response.Email)
+	err = u.emailer.Welcome(newUser.FirstName, newUser.Email)
 	if err != nil {
 		slogger.InvalidRequest(err.Error())
 	}
-	util.Respond(w, util.Success("success", response))
+	
+	err = u.signIn(w, newUser)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		return
+	}
+	util.Respond(w, util.Success("success", newUser))
 }
 
 // Login is used to authenticate a user w/ their email & password
@@ -73,5 +82,34 @@ func (u *Users) Login(w http.ResponseWriter, r *http.Request) {
 		util.Respond(w, util.Fail("fail", err.Error()))
 		return
 	}
+	err = u.signIn(w, foundUser)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		return
+	}
 	util.Respond(w, util.Success("success", foundUser))
+}
+
+// signIn creates and returns a cookie for an authenticated user
+func (u *Users) signIn(w http.ResponseWriter, user *models.User) error {
+	if user.Remember == "" {
+		token, err := rand.RememberToken()
+		if err != nil {
+			return err
+		}
+		user.Remember = token
+		_, err = u.us.Update(user)
+		if err != nil {
+			return err
+		}
+	}
+	cookie := http.Cookie{
+		Name:     "remember_token",
+		Value:    user.Remember,
+	}
+	http.SetCookie(w, &cookie)
+	return nil
 }
