@@ -53,3 +53,25 @@ func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
 	}
 	util.Respond(w, util.Success("success", response))
 }
+
+// Login is used to authenticate a user w/ their email & password
+// POST /users/login
+func (u *Users) Login(w http.ResponseWriter, r *http.Request) {
+	user := &models.User{}
+	err := json.NewDecoder(r.Body).Decode(user)
+	if err != nil {
+		util.Respond(w, util.Fail("fail", err.Error()))
+		slogger.InvalidRequest(string(models.ErrInvalidRequest))
+		return
+	}
+
+	foundUser, err := u.us.Authenticate(user.Email, user.Password)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnauthorized)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		return
+	}
+	util.Respond(w, util.Success("success", foundUser))
+}

@@ -68,6 +68,7 @@ func main() {
 
 	// user routes
 	r.HandleFunc("/users/signup", usersController.Create).Methods("POST")
+	r.HandleFunc("/users/login", usersController.Login).Methods("POST")
 
 	appPort := fmt.Sprintf(":%s", os.Getenv("APP_PORT"))
 	fmt.Println("Starting Server on PORT " + appPort)
