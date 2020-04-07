@@ -47,5 +47,9 @@ func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
 		util.Respond(w, util.Fail("fail", err.Error()))
 		return
 	}
+	err = u.emailer.Welcome(response.FirstName, response.Email)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+	}
 	util.Respond(w, util.Success("success", response))
 }
