@@ -6,8 +6,8 @@ import (
 
 	"github.com/sajicode/go-book/email"
 	"github.com/sajicode/go-book/logger"
-	"github.com/sajicode/go-book/rand"
 	"github.com/sajicode/go-book/models"
+	"github.com/sajicode/go-book/rand"
 	util "github.com/sajicode/go-book/utils"
 )
 
@@ -112,4 +112,90 @@ func (u *Users) signIn(w http.ResponseWriter, user *models.User) error {
 	}
 	http.SetCookie(w, &cookie)
 	return nil
+}
+
+// ResetPwForm is used to process the forgot password form
+// and the reset password form.
+type ResetPwForm struct {
+	Email    string `json:"email"`
+	Token    string `json:"token"`
+	Password string `json:"password"`
+}
+
+// ResponseMessage holds the structure of a normal message to the client
+type ResponseMessage struct {
+	Message string `json:"message"`
+}
+
+// InitiateReset starts the process of resetting a user's password
+// POST /users/forgot
+func (u *Users) InitiateReset(w http.ResponseWriter, r *http.Request) {
+	form := &ResetPwForm{}
+	err := json.NewDecoder(r.Body).Decode(form)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		slogger.InvalidRequest(string(models.ErrInvalidRequest))
+		return
+	}
+	token, err := u.us.InitiateReset(form.Email)
+
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		slogger.InvalidRequest(string(models.ErrInvalidRequest))
+		return
+	}
+
+	err = u.emailer.ResetPw(form.Email, token)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		slogger.InvalidRequest(string(models.ErrInvalidRequest))
+		return
+	}
+	message := &ResponseMessage{
+		Message: "Instructions for resetting your password have been emailed to you.",
+	}
+	util.Respond(w, util.Success("success", message))
+}
+
+// CompleteReset rounds up the process of resetting a user's password
+func (u *Users) CompleteReset(w http.ResponseWriter, r *http.Request) {
+	//* get token from url
+	token := r.URL.Query().Get("token")
+	form := &ResetPwForm{}
+	err := json.NewDecoder(r.Body).Decode(form)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		slogger.InvalidRequest(string(models.ErrInvalidRequest))
+		return
+	}
+	user, err := u.us.CompleteReset(token, form.Password);
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		slogger.InvalidRequest(string(models.ErrInvalidRequest))
+		return
+	}
+	err = u.signIn(w, user)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		return
+	}
+	util.Respond(w, util.Success("success", user))
 }

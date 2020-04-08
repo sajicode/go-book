@@ -69,6 +69,8 @@ func main() {
 	// user routes
 	r.HandleFunc("/users/signup", usersController.Create).Methods("POST")
 	r.HandleFunc("/users/login", usersController.Login).Methods("POST")
+	r.HandleFunc("/users/forgot", usersController.InitiateReset).Methods("POST")
+	r.HandleFunc("/users/reset", usersController.CompleteReset).Methods("POST")
 
 	appPort := fmt.Sprintf(":%s", os.Getenv("APP_PORT"))
 	fmt.Println("Starting Server on PORT " + appPort)

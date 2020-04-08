@@ -10,7 +10,7 @@ import (
 const (
 	welcomeSubject = "Welcome to Literary Reviews"
 	resetSubject   = "Instructions for resetting your password."
-	resetBaseURL   = "localhost:7300/reset"
+	resetBaseURL   = "http://localhost:7300/users/reset"
 )
 
 const welcomeText = `Hi there!
