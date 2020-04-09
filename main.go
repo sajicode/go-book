@@ -10,6 +10,7 @@ import (
 	"github.com/sajicode/go-book/controllers"
 	"github.com/sajicode/go-book/email"
 	"github.com/sajicode/go-book/logger"
+	"github.com/sajicode/go-book/middleware"
 	"github.com/sajicode/go-book/models"
 )
 
@@ -59,6 +60,16 @@ func main() {
 	r := mux.NewRouter()
 
 	usersController := controllers.NewUsers(services.User, *emailer)
+
+	// auth middleware
+	userMw := middleware.User{
+		UserService: services.User,
+	}
+	requireAuth := middleware.RequireUser{
+		User: userMw,
+	}
+
+	_ = requireAuth
 
 	// Non-existent pages
 	r.NotFoundHandler = http.HandlerFunc(notFound)
