@@ -60,16 +60,12 @@ func main() {
 	r := mux.NewRouter()
 
 	usersController := controllers.NewUsers(services.User, *emailer)
+	booksController := controllers.NewBooks(services.Book)
 
 	// auth middleware
 	userMw := middleware.User{
 		UserService: services.User,
 	}
-	requireAuth := middleware.RequireUser{
-		User: userMw,
-	}
-
-	_ = requireAuth
 
 	// Non-existent pages
 	r.NotFoundHandler = http.HandlerFunc(notFound)
@@ -82,6 +78,9 @@ func main() {
 	r.HandleFunc("/users/login", usersController.Login).Methods("POST")
 	r.HandleFunc("/users/forgot", usersController.InitiateReset).Methods("POST")
 	r.HandleFunc("/users/reset", usersController.CompleteReset).Methods("POST")
+
+	// book routes
+	r.HandleFunc("/books/new", userMw.ApplyFn(booksController.Create)).Methods("POST")
 
 	appPort := fmt.Sprintf(":%s", os.Getenv("APP_PORT"))
 	fmt.Println("Starting Server on PORT " + appPort)

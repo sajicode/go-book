@@ -1,10 +1,12 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/sajicode/go-book/context"
 	"github.com/sajicode/go-book/models"
+	util "github.com/sajicode/go-book/utils"
 )
 
 // User struct
@@ -23,10 +25,13 @@ func (u *User) ApplyFn(next http.HandlerFunc) http.HandlerFunc {
 
 		cookie, err := r.Cookie("remember_token")
 		if err != nil {
-			next(w, r)
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnauthorized)
+			util.Respond(w, util.Fail("fail", "Unauthorized. Login to access this page"))
 			return
 		}
 		user, err := u.UserService.ByRemember(cookie.Value)
+		fmt.Println(user)
 		if err != nil {
 			next(w, r)
 			return
@@ -37,6 +42,8 @@ func (u *User) ApplyFn(next http.HandlerFunc) http.HandlerFunc {
 		next(w, r)
 	})
 }
+
+//TODO we might not need the functions below
 
 // RequireUser struct holds the fields required
 type RequireUser struct {
@@ -49,13 +56,14 @@ func (mw *RequireUser) Apply(next http.Handler) http.HandlerFunc {
 	return mw.ApplyFn(next.ServeHTTP)
 }
 
-// ApplyFn assumes that User middleware has already been yun
+// ApplyFn assumes that User middleware has already been run
 func (mw *RequireUser) ApplyFn(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user := context.User(r.Context())
 		if user == nil {
-			http.Redirect(w, r, "/login", http.StatusFound)
-			return
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnauthorized)
+			util.Respond(w, util.Fail("fail", "Unauthorized. Login to access this page"))
 		}
 		next(w, r)
 	})
