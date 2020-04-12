@@ -19,6 +19,7 @@ type Book struct {
 	UpdatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 	DeletedAt *time.Time `gorm:"default:NULL" json:"deleted_at"`
 	Reviews   []Review   `gorm:"-" json:"reviews"`
+	User      User       `gorm:"ForeignKey:user_id"json:"user"`
 }
 
 // BookDB interface
@@ -164,7 +165,7 @@ var _ BookDB = &bookGorm{}
 // ByID gets a book by it's ID
 func (bg *bookGorm) ByID(id uint) (*Book, error) {
 	var book Book
-	db := bg.db.Preload("Users").Preload("Reviews").Where("id = ?", id)
+	db := bg.db.Preload("User").Where("id = ?", id)
 	err := first(db, &book)
 	return &book, err
 }

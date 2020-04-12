@@ -3,7 +3,9 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/sajicode/go-book/context"
 	"github.com/sajicode/go-book/models"
 	util "github.com/sajicode/go-book/utils"
@@ -64,4 +66,30 @@ func (b *Books) ShowUserBooks(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	util.Respond(w, util.Success("success", books))
+}
+
+// GetOneBook returns a single book by its ID
+// GET/books/:id
+func (b *Books) GetOneBook(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	idStr := vars["id"]
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		slogger.InvalidRequest(string(models.ErrInvalidRequest))
+		return
+	}
+	book, err := b.bs.ByID(uint(id))
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		slogger.InvalidRequest(string(models.ErrInvalidRequest))
+		return
+	}
+	util.Respond(w, util.Success("success", book))
 }
