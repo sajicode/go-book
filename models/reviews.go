@@ -2,19 +2,20 @@ package models
 
 import (
 	"time"
+
 	"github.com/jinzhu/gorm"
 )
 
 // Review struct represents the structure of our reviews in the DB
 type Review struct {
-	ID        uint      `gorm:"primary_key;auto_increment" json:"id"`
-	UserID uint   `gorm:"not_null;index;auto_preload" json:"user_id"`
-	User   User   `gorm:"-" json:"user"`
-	BookID uint   `gorm:"not_null;index" json:"book_id"`
-	notes  string `gorm:"not_null" json:"notes"`
-	CreatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
-	DeletedAt  *time.Time `gorm:"default:NULL" json:"deleted_at"`
+	ID        uint       `gorm:"primary_key;auto_increment" json:"id"`
+	UserID    uint       `gorm:"not_null;index;auto_preload" json:"user_id"`
+	User      User       `gorm:"-" json:"user"`
+	BookID    uint       `gorm:"not_null;index" json:"book_id"`
+	Notes     string     `gorm:"not_null" json:"notes"`
+	CreatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+	DeletedAt *time.Time `gorm:"default:NULL" json:"deleted_at"`
 }
 
 // ReviewDB interface
@@ -57,7 +58,7 @@ func runReviewValidationFunc(review *Review, fns ...reviewValidationFunc) error 
 
 // * validations
 
-// reviewValidator struct 
+// reviewValidator struct
 type reviewValidator struct {
 	ReviewDB
 }
@@ -87,7 +88,7 @@ func (rv *reviewValidator) Update(review *Review) (*Review, error) {
 }
 
 // Delete validator for deleting a review
-func (rv *reviewValidator) Delete(id uint) (error) {
+func (rv *reviewValidator) Delete(id uint) error {
 	if id <= 0 {
 		return ErrInvalidID
 	}
@@ -112,7 +113,7 @@ func (rv *reviewValidator) bookIDRequired(r *Review) error {
 
 // reviewNotesRequired makes sure a title is available while creating a review
 func (rv *reviewValidator) reviewNotesRequired(r *Review) error {
-	if r.notes == "" {
+	if r.Notes == "" {
 		return ErrReviewRequired
 	}
 	return nil

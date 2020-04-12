@@ -10,11 +10,11 @@ import (
 type Book struct {
 	ID        uint       `gorm:"primary_key;auto_increment" json:"id"`
 	UserID    uint       `gorm:"not_null;index;auto_preload" json:"user_id"`
-	Title     string     `gorm: "not_null" json:"title"`
-	Author    string     `gorm: "not_null" json:"author"`
-	Category  string     `gorm: "not_null" json:"category"`
-	Summary   string     `gorm: "not_null" json:"summary"`
-	Image     string     `gorm: "not_null" json:"image"`
+	Title     string     `gorm:"not_null"json:"title"`
+	Author    string     `gorm:"not_null"json:"author"`
+	Category  string     `gorm:"not_null"json:"category"`
+	Summary   string     `gorm:"not_null"json:"summary"`
+	Image     string     `gorm:"not_null"json:"image"`
 	CreatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 	DeletedAt *time.Time `gorm:"default:NULL" json:"deleted_at"`
@@ -196,7 +196,7 @@ func (bg *bookGorm) Delete(id uint) error {
 // ByUserID fetches all books by a user
 func (bg *bookGorm) ByUserID(userID uint) ([]Book, error) {
 	var books []Book
-	err := bg.db.Preload("Reviews").Where("user_id = ?", userID).Find(&books).Error
+	err := bg.db.Where("user_id = ?", userID).Find(&books).Error
 	if err != nil {
 		return nil, err
 	}

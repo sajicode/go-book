@@ -81,6 +81,7 @@ func main() {
 
 	// book routes
 	r.HandleFunc("/books/new", userMw.ApplyFn(booksController.Create)).Methods("POST")
+	r.HandleFunc("/books/me", userMw.ApplyFn(booksController.ShowUserBooks)).Methods("GET")
 
 	appPort := fmt.Sprintf(":%s", os.Getenv("APP_PORT"))
 	fmt.Println("Starting Server on PORT " + appPort)

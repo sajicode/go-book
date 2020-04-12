@@ -49,3 +49,19 @@ func (b *Books) Create(w http.ResponseWriter, r *http.Request) {
 	}
 	util.Respond(w, util.Success("success", newBook))
 }
+
+// ShowUserBooks returns all books created by a user
+// GET /books/me
+func (b *Books) ShowUserBooks(w http.ResponseWriter, r *http.Request) {
+	user := context.User(r.Context())
+	books, err := b.bs.ByUserID(user.ID)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		slogger.InvalidRequest(string(models.ErrInvalidRequest))
+		return
+	}
+	util.Respond(w, util.Success("success", books))
+}
