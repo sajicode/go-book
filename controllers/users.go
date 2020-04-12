@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/sajicode/go-book/context"
 	"github.com/sajicode/go-book/email"
 	"github.com/sajicode/go-book/logger"
 	"github.com/sajicode/go-book/models"
@@ -20,6 +21,8 @@ var slogger = logger.NewLogger()
 type Users struct {
 	us      models.UserService
 	emailer email.Client
+	bs      models.BookService
+	rs      models.ReviewService
 }
 
 // NewUsers is used to create a new user controller
@@ -213,6 +216,16 @@ func (u *Users) Update(w http.ResponseWriter, r *http.Request) {
 		util.Respond(w, util.Fail("fail", err.Error()))
 		return
 	}
+	//TODO ensure users update only their accounts
+	authUser := context.User(r.Context())
+	if authUser.ID != user.ID {
+		slogger.InvalidRequest("Unauthorized request")
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnauthorized)
+		util.Respond(w, util.Fail("fail", "Invalid request"))
+		return
+	}
+
 	err = json.NewDecoder(r.Body).Decode(user)
 	if err != nil {
 		slogger.InvalidRequest(err.Error())
@@ -242,6 +255,19 @@ func (u *Users) Update(w http.ResponseWriter, r *http.Request) {
 	util.Respond(w, util.Success("success", updatedUser))
 }
 
+// GetUser returns a single user by id
+func (u *Users) GetUser(w http.ResponseWriter, r *http.Request) {
+	user, err := u.userByID(w, r)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		return
+	}
+	util.Respond(w, util.Success("success", user))
+}
+
 // userByID returns a user from the DB by their ID
 func (u *Users) userByID(w http.ResponseWriter, r *http.Request) (*models.User, error) {
 	vars := mux.Vars(r)
@@ -256,5 +282,13 @@ func (u *Users) userByID(w http.ResponseWriter, r *http.Request) (*models.User, 
 		slogger.InvalidArg(err.Error())
 		return nil, err
 	}
+
+	// books, err := u.bs.ByUserID(user.ID)
+	// if err != nil {
+	// 	slogger.InvalidArg(err.Error())
+	// 	return nil, err
+	// }
+	// user.Books = books
+	//TODO get user review details
 	return user, nil
 }

@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/sajicode/go-book/context"
@@ -31,9 +30,10 @@ func (u *User) ApplyFn(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 		user, err := u.UserService.ByRemember(cookie.Value)
-		fmt.Println(user)
 		if err != nil {
-			next(w, r)
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnauthorized)
+			util.Respond(w, util.Fail("fail", "Unauthorized. Login to access this page"))
 			return
 		}
 		ctx := r.Context()
