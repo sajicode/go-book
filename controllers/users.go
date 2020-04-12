@@ -3,7 +3,9 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/sajicode/go-book/email"
 	"github.com/sajicode/go-book/logger"
 	"github.com/sajicode/go-book/models"
@@ -16,14 +18,14 @@ var slogger = logger.NewLogger()
 
 // Users controller structure
 type Users struct {
-	us models.UserService
+	us      models.UserService
 	emailer email.Client
 }
 
 // NewUsers is used to create a new user controller
 func NewUsers(us models.UserService, emailer email.Client) *Users {
 	return &Users{
-		us: us,
+		us:      us,
 		emailer: emailer,
 	}
 }
@@ -51,7 +53,7 @@ func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		slogger.InvalidRequest(err.Error())
 	}
-	
+
 	err = u.signIn(w, newUser)
 	if err != nil {
 		slogger.InvalidRequest(err.Error())
@@ -107,8 +109,8 @@ func (u *Users) signIn(w http.ResponseWriter, user *models.User) error {
 		}
 	}
 	cookie := http.Cookie{
-		Name:     "remember_token",
-		Value:    user.Remember,
+		Name:  "remember_token",
+		Value: user.Remember,
 	}
 	http.SetCookie(w, &cookie)
 	return nil
@@ -180,7 +182,7 @@ func (u *Users) CompleteReset(w http.ResponseWriter, r *http.Request) {
 		slogger.InvalidRequest(string(models.ErrInvalidRequest))
 		return
 	}
-	user, err := u.us.CompleteReset(token, form.Password);
+	user, err := u.us.CompleteReset(token, form.Password)
 	if err != nil {
 		slogger.InvalidRequest(err.Error())
 		w.Header().Add("Content-Type", "application/json")
@@ -198,4 +200,61 @@ func (u *Users) CompleteReset(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	util.Respond(w, util.Success("success", user))
+}
+
+// Update a user's details
+// POST /users/signup
+func (u *Users) Update(w http.ResponseWriter, r *http.Request) {
+	user, err := u.userByID(w, r)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		return
+	}
+	err = json.NewDecoder(r.Body).Decode(user)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		return
+	}
+
+	updatedUser, err := u.us.Update(user)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		return
+	}
+
+	err = u.signIn(w, updatedUser)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		return
+	}
+	util.Respond(w, util.Success("success", updatedUser))
+}
+
+// userByID returns a user from the DB by their ID
+func (u *Users) userByID(w http.ResponseWriter, r *http.Request) (*models.User, error) {
+	vars := mux.Vars(r)
+	idStr := vars["id"]
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		slogger.InvalidArg(err.Error())
+		return nil, err
+	}
+	user, err := u.us.ByID(uint(id))
+	if err != nil {
+		slogger.InvalidArg(err.Error())
+		return nil, err
+	}
+	return user, nil
 }

@@ -76,6 +76,7 @@ func main() {
 	// user routes
 	r.HandleFunc("/users/signup", usersController.Create).Methods("POST")
 	r.HandleFunc("/users/login", usersController.Login).Methods("POST")
+	r.HandleFunc("/users/update/{id:[0-9]+}", userMw.ApplyFn(usersController.Update)).Methods("POST")
 	r.HandleFunc("/users/forgot", usersController.InitiateReset).Methods("POST")
 	r.HandleFunc("/users/reset", usersController.CompleteReset).Methods("POST")
 
