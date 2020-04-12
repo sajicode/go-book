@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/sajicode/go-book/context"
 	"github.com/sajicode/go-book/models"
 	util "github.com/sajicode/go-book/utils"
 )
@@ -23,8 +24,11 @@ func NewBooks(bs models.BookService) *Books {
 // Create a new book
 // POST /books/new
 func (b *Books) Create(w http.ResponseWriter, r *http.Request) {
+	user := context.User(r.Context())
+
 	book := &models.Book{}
 	err := json.NewDecoder(r.Body).Decode(book)
+	book.UserID = user.ID
 	if err != nil {
 		slogger.InvalidRequest(err.Error())
 		w.Header().Add("Content-Type", "application/json")

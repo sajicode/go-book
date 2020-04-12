@@ -68,3 +68,6 @@ images/**
 
 # server logs
 logrus.log
+
+# vscode settings
+settings.json
