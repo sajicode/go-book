@@ -93,7 +93,7 @@ func main() {
 	r.HandleFunc("/books/{id:[0-9]+}/review", userMw.ApplyFn(reviewsController.Create)).Methods("POST")
 	r.HandleFunc("/books/{id:[0-9]+}/reviews", userMw.ApplyFn(reviewsController.GetBookReviews)).Methods("GET")
 
-	appPort := fmt.Sprintf(":%s", os.Getenv("APP_PORT"))
+	appPort := fmt.Sprintf(":%s", os.Getenv("PORT"))
 	fmt.Println("Starting Server on PORT " + appPort)
 
 	http.ListenAndServe(appPort, r)
