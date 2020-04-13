@@ -197,7 +197,7 @@ func (bg *bookGorm) Delete(id uint) error {
 // ByUserID fetches all books by a user
 func (bg *bookGorm) ByUserID(userID uint) ([]Book, error) {
 	var books []Book
-	err := bg.db.Where("user_id = ?", userID).Find(&books).Error
+	err := bg.db.Preload("User").Where("user_id = ?", userID).Find(&books).Error
 	if err != nil {
 		return nil, err
 	}
