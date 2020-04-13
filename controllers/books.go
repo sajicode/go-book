@@ -36,7 +36,6 @@ func (b *Books) Create(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		util.Respond(w, util.Fail("fail", err.Error()))
-		slogger.InvalidRequest(string(models.ErrInvalidRequest))
 		return
 	}
 
@@ -46,7 +45,6 @@ func (b *Books) Create(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		util.Respond(w, util.Fail("fail", err.Error()))
-		slogger.InvalidRequest(string(models.ErrInvalidRequest))
 		return
 	}
 	util.Respond(w, util.Success("success", newBook))
@@ -62,7 +60,6 @@ func (b *Books) ShowUserBooks(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
 		util.Respond(w, util.Fail("fail", err.Error()))
-		slogger.InvalidRequest(string(models.ErrInvalidRequest))
 		return
 	}
 	util.Respond(w, util.Success("success", books))
@@ -79,7 +76,6 @@ func (b *Books) GetOneBook(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		util.Respond(w, util.Fail("fail", err.Error()))
-		slogger.InvalidRequest(string(models.ErrInvalidRequest))
 		return
 	}
 	book, err := b.bs.ByID(uint(id))
@@ -88,7 +84,6 @@ func (b *Books) GetOneBook(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
 		util.Respond(w, util.Fail("fail", err.Error()))
-		slogger.InvalidRequest(string(models.ErrInvalidRequest))
 		return
 	}
 	util.Respond(w, util.Success("success", book))
@@ -134,6 +129,35 @@ func (b *Books) Update(w http.ResponseWriter, r *http.Request) {
 
 	util.Respond(w, util.Success("success", updatedBook))
 
+}
+
+// GetAllBooks returns a paginated list of books
+func (b *Books) GetAllBooks(w http.ResponseWriter, r *http.Request) {
+	limitStr := r.URL.Query().Get("limit")
+	pageStr := r.URL.Query().Get("page")
+
+	if limitStr == "" {
+		limitStr = "10"
+	}
+
+	if pageStr == "" {
+		pageStr = "1"
+	}
+
+	limit, _ := strconv.Atoi(limitStr)
+	page, _ := strconv.Atoi(pageStr)
+
+	books, err := b.bs.AllBooks(limit, page)
+
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		util.Respond(w, util.Fail("fail", "Error fetching books"))
+		return
+	}
+
+	util.Respond(w, util.Success("success", books))
 }
 
 // bookByID returns a book by it's ID

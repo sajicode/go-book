@@ -83,6 +83,7 @@ func main() {
 
 	// book routes
 	r.HandleFunc("/books/new", userMw.ApplyFn(booksController.Create)).Methods("POST")
+	r.HandleFunc("/books", booksController.GetAllBooks).Methods("GET")
 	r.HandleFunc("/books/me", userMw.ApplyFn(booksController.ShowUserBooks)).Methods("GET")
 	r.HandleFunc("/books/{id:[0-9]+}", userMw.ApplyFn(booksController.GetOneBook)).Methods("GET")
 	r.HandleFunc("/books/update/{id:[0-9]+}", userMw.ApplyFn(booksController.Update)).Methods("POST")
