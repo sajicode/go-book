@@ -93,3 +93,62 @@ func (b *Books) GetOneBook(w http.ResponseWriter, r *http.Request) {
 	}
 	util.Respond(w, util.Success("success", book))
 }
+
+// Update a book's details
+// POST/books/update/:id
+func (b *Books) Update(w http.ResponseWriter, r *http.Request) {
+	book, err := b.bookByID(w, r)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		return
+	}
+	user := context.User(r.Context())
+	if user.ID != book.UserID {
+		slogger.InvalidRequest("Unauthorized request")
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnauthorized)
+		util.Respond(w, util.Fail("fail", "Invalid request"))
+		return
+	}
+
+	err = json.NewDecoder(r.Body).Decode(book)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		return
+	}
+
+	updatedBook, err := b.bs.Update(book)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		return
+	}
+
+	util.Respond(w, util.Success("success", updatedBook))
+
+}
+
+// bookByID returns a book by it's ID
+func (b *Books) bookByID(w http.ResponseWriter, r *http.Request) (*models.Book, error) {
+	vars := mux.Vars(r)
+	idStr := vars["id"]
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		slogger.InvalidArg(err.Error())
+		return nil, err
+	}
+	book, err := b.bs.ByID(uint(id))
+	if err != nil {
+		slogger.InvalidArg(err.Error())
+		return nil, err
+	}
+	return book, nil
+}
