@@ -10,7 +10,7 @@ import (
 type Review struct {
 	ID        uint       `gorm:"primary_key;auto_increment" json:"id"`
 	UserID    uint       `gorm:"not_null;index;auto_preload" json:"user_id"`
-	BookID    uint       `gorm:"not_null;index" json:"book_id"`
+	BookID    uint       `gorm:"not_null;index;auto_preload" json:"book_id"`
 	Notes     string     `gorm:"not_null" json:"notes"`
 	CreatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
@@ -173,7 +173,7 @@ func (rg *reviewGorm) ByUserID(userID uint) ([]Review, error) {
 // ByBookID fetches all reviews for a book
 func (rg *reviewGorm) ByBookID(bookID uint) ([]Review, error) {
 	var reviews []Review
-	err := rg.db.Where("book_id = ?", bookID).Find(&reviews).Error
+	err := rg.db.Preload("User").Preload("Book").Where("book_id = ?", bookID).Find(&reviews).Error
 	if err != nil {
 		return nil, err
 	}

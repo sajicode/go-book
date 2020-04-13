@@ -91,6 +91,7 @@ func main() {
 
 	// review routes
 	r.HandleFunc("/books/{id:[0-9]+}/review", userMw.ApplyFn(reviewsController.Create)).Methods("POST")
+	r.HandleFunc("/books/{id:[0-9]+}/reviews", userMw.ApplyFn(reviewsController.GetBookReviews)).Methods("GET")
 
 	appPort := fmt.Sprintf(":%s", os.Getenv("APP_PORT"))
 	fmt.Println("Starting Server on PORT " + appPort)
