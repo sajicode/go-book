@@ -10,12 +10,13 @@ import (
 type Review struct {
 	ID        uint       `gorm:"primary_key;auto_increment" json:"id"`
 	UserID    uint       `gorm:"not_null;index;auto_preload" json:"user_id"`
-	User      User       `gorm:"-" json:"user"`
 	BookID    uint       `gorm:"not_null;index" json:"book_id"`
 	Notes     string     `gorm:"not_null" json:"notes"`
 	CreatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 	DeletedAt *time.Time `gorm:"default:NULL" json:"deleted_at"`
+	User      User       `gorm:"ForeignKey:user_id"json:"user"`
+	Book      Book       `gorm:"ForeignKey:book_id"json:"book"`
 }
 
 // ReviewDB interface
@@ -129,7 +130,7 @@ type reviewGorm struct {
 // ByID gets a review by it's ID
 func (rg *reviewGorm) ByID(id uint) (*Review, error) {
 	var review Review
-	db := rg.db.Where("id = ?", id)
+	db := rg.db.Preload("User").Preload("Book").Where("id = ?", id)
 	err := first(db, &review)
 	return &review, err
 }

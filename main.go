@@ -61,6 +61,7 @@ func main() {
 
 	usersController := controllers.NewUsers(services.User, *emailer)
 	booksController := controllers.NewBooks(services.Book)
+	reviewsController := controllers.NewReviews(services.Review, services.Book)
 
 	// auth middleware
 	userMw := middleware.User{
@@ -87,6 +88,9 @@ func main() {
 	r.HandleFunc("/books/me", userMw.ApplyFn(booksController.ShowUserBooks)).Methods("GET")
 	r.HandleFunc("/books/{id:[0-9]+}", userMw.ApplyFn(booksController.GetOneBook)).Methods("GET")
 	r.HandleFunc("/books/update/{id:[0-9]+}", userMw.ApplyFn(booksController.Update)).Methods("POST")
+
+	// review routes
+	r.HandleFunc("/books/{id:[0-9]+}/review", userMw.ApplyFn(reviewsController.Create)).Methods("POST")
 
 	appPort := fmt.Sprintf(":%s", os.Getenv("APP_PORT"))
 	fmt.Println("Starting Server on PORT " + appPort)
