@@ -112,8 +112,9 @@ func (u *Users) signIn(w http.ResponseWriter, user *models.User) error {
 		}
 	}
 	cookie := http.Cookie{
-		Name:  "remember_token",
-		Value: user.Remember,
+		Name:   "remember_token",
+		Value:  user.Remember,
+		MaxAge: 604800, // 1 week
 	}
 	http.SetCookie(w, &cookie)
 	return nil
@@ -178,20 +179,18 @@ func (u *Users) CompleteReset(w http.ResponseWriter, r *http.Request) {
 	form := &ResetPwForm{}
 	err := json.NewDecoder(r.Body).Decode(form)
 	if err != nil {
-		slogger.InvalidRequest(err.Error())
+		slogger.InvalidRequest(string(models.ErrInvalidRequest))
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		util.Respond(w, util.Fail("fail", err.Error()))
-		slogger.InvalidRequest(string(models.ErrInvalidRequest))
 		return
 	}
 	user, err := u.us.CompleteReset(token, form.Password)
 	if err != nil {
-		slogger.InvalidRequest(err.Error())
+		slogger.InvalidRequest(string(models.ErrInvalidRequest))
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusBadRequest)
 		util.Respond(w, util.Fail("fail", err.Error()))
-		slogger.InvalidRequest(string(models.ErrInvalidRequest))
 		return
 	}
 	err = u.signIn(w, user)
@@ -216,7 +215,6 @@ func (u *Users) Update(w http.ResponseWriter, r *http.Request) {
 		util.Respond(w, util.Fail("fail", err.Error()))
 		return
 	}
-	//TODO ensure users update only their accounts
 	authUser := context.User(r.Context())
 	if authUser.ID != user.ID {
 		slogger.InvalidRequest("Unauthorized request")
