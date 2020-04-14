@@ -69,29 +69,37 @@ func main() {
 	}
 
 	// Non-existent pages
-	r.NotFoundHandler = http.HandlerFunc(notFound)
+	// r.NotFoundHandler = http.HandlerFunc(notFound)
+
+	api := r.PathPrefix("/api/").Subrouter()
 
 	// index page
-	r.HandleFunc("/", hello).Methods("GET")
+	api.HandleFunc("/", hello).Methods("GET")
 
 	// user routes
-	r.HandleFunc("/users/signup", usersController.Create).Methods("POST")
-	r.HandleFunc("/users/login", usersController.Login).Methods("POST")
-	r.HandleFunc("/users/update/{id:[0-9]+}", userMw.ApplyFn(usersController.Update)).Methods("POST")
-	r.HandleFunc("/users/{id:[0-9]+}", userMw.ApplyFn(usersController.GetUser)).Methods("GET")
-	r.HandleFunc("/users/forgot", usersController.InitiateReset).Methods("POST")
-	r.HandleFunc("/users/reset", usersController.CompleteReset).Methods("POST")
+	api.HandleFunc("/users/signup", usersController.Create).Methods("POST")
+	api.HandleFunc("/users/login", usersController.Login).Methods("POST")
+	api.HandleFunc("/users/update/{id:[0-9]+}", userMw.ApplyFn(usersController.Update)).Methods("POST")
+	api.HandleFunc("/users/{id:[0-9]+}", userMw.ApplyFn(usersController.GetUser)).Methods("GET")
+	api.HandleFunc("/users/forgot", usersController.InitiateReset).Methods("POST")
+	api.HandleFunc("/users/reset", usersController.CompleteReset).Methods("POST")
 
 	// book routes
-	r.HandleFunc("/books/new", userMw.ApplyFn(booksController.Create)).Methods("POST")
-	r.HandleFunc("/books", booksController.GetAllBooks).Methods("GET")
-	r.HandleFunc("/books/me", userMw.ApplyFn(booksController.ShowUserBooks)).Methods("GET")
-	r.HandleFunc("/books/{id:[0-9]+}", userMw.ApplyFn(booksController.GetOneBook)).Methods("GET")
-	r.HandleFunc("/books/update/{id:[0-9]+}", userMw.ApplyFn(booksController.Update)).Methods("POST")
+	api.HandleFunc("/books/new", userMw.ApplyFn(booksController.Create)).Methods("POST")
+	api.HandleFunc("/books", booksController.GetAllBooks).Methods("GET")
+	api.HandleFunc("/books/me", userMw.ApplyFn(booksController.ShowUserBooks)).Methods("GET")
+	api.HandleFunc("/books/{id:[0-9]+}", userMw.ApplyFn(booksController.GetOneBook)).Methods("GET")
+	api.HandleFunc("/books/update/{id:[0-9]+}", userMw.ApplyFn(booksController.Update)).Methods("POST")
 
 	// review routes
-	r.HandleFunc("/books/{id:[0-9]+}/review", userMw.ApplyFn(reviewsController.Create)).Methods("POST")
-	r.HandleFunc("/books/{id:[0-9]+}/reviews", userMw.ApplyFn(reviewsController.GetBookReviews)).Methods("GET")
+	api.HandleFunc("/books/{id:[0-9]+}/review", userMw.ApplyFn(reviewsController.Create)).Methods("POST")
+	api.HandleFunc("/books/{id:[0-9]+}/reviews", userMw.ApplyFn(reviewsController.GetBookReviews)).Methods("GET")
+
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./client/build/static/"))))
+
+	r.PathPrefix("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./client/build/index.html")
+	})
 
 	appPort := fmt.Sprintf(":%s", os.Getenv("PORT"))
 	fmt.Println("Starting Server on PORT " + appPort)
