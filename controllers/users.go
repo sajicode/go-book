@@ -114,7 +114,8 @@ func (u *Users) signIn(w http.ResponseWriter, user *models.User) error {
 	cookie := http.Cookie{
 		Name:   "remember_token",
 		Value:  user.Remember,
-		MaxAge: 604800, // 1 week
+		Path:   "/",
+		MaxAge: 7, // 1 week
 	}
 	http.SetCookie(w, &cookie)
 	return nil
