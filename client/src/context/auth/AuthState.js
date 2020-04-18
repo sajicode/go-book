@@ -19,8 +19,8 @@ const cookie = new Cookies();
 
 const AuthState = (props) => {
 	const initialState = {
-		isAuthenticated: null,
-		loading: true,
+		isAuthenticated: cookie.get('remember_token') ? true : false,
+		loading: false,
 		user: null,
 		error: null
 	};
