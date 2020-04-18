@@ -112,10 +112,9 @@ func (u *Users) signIn(w http.ResponseWriter, user *models.User) error {
 		}
 	}
 	cookie := http.Cookie{
-		Name:   "remember_token",
-		Value:  user.Remember,
-		Path:   "/",
-		MaxAge: 7, // 1 week
+		Name:  "remember_token",
+		Value: user.Remember,
+		Path:  "/",
 	}
 	http.SetCookie(w, &cookie)
 	return nil
@@ -257,6 +256,20 @@ func (u *Users) Update(w http.ResponseWriter, r *http.Request) {
 // GetUser returns a single user by id
 func (u *Users) GetUser(w http.ResponseWriter, r *http.Request) {
 	user, err := u.userByID(w, r)
+	if err != nil {
+		slogger.InvalidRequest(err.Error())
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		util.Respond(w, util.Fail("fail", err.Error()))
+		return
+	}
+	util.Respond(w, util.Success("success", user))
+}
+
+// UserByHash gets a user by the cookie hash
+func (u *Users) UserByHash(w http.ResponseWriter, r *http.Request) {
+	token := r.URL.Query().Get("token")
+	user, err := u.us.ByRemember(token)
 	if err != nil {
 		slogger.InvalidRequest(err.Error())
 		w.Header().Add("Content-Type", "application/json")

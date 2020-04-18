@@ -1,10 +1,10 @@
 package models
 
 import (
-	"regexp"
-	"time"
 	"os"
+	"regexp"
 	"strings"
+	"time"
 
 	"github.com/jinzhu/gorm"
 	"github.com/sajicode/go-book/hash"
@@ -20,20 +20,20 @@ var hmacSecretKey = os.Getenv("HMAC_SECRET_KEY")
 // address and a password so users can log in and gain
 // access to their content.
 type User struct {
-	ID         uint    `gorm:"primary_key;auto_increment" json:"id"`
-	Avatar string `gorm:"size:255;null;DEFAULT:'https://res.cloudinary.com/sajicode/image/upload/v1549973773/avatar.png'" json:"avatar"`
-	FirstName	string `gorm:"size:255;not null" json:"first_name"`
-	LastName	string `gorm:"size:255;not null" json:"last_name"`
-	Email	string `gorm:"not null;unique_index" json:"email"`
-	Password     string `gorm:"-" json:"password"`
-	PasswordHash string `gorm:"not null" json:"password_hash"`
-	Remember     string `gorm:"-" json:"remember"`
-	RememberHash string `gorm:"not null;unique_index" json:"remember_hash"`
-	CreatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
-	DeletedAt  *time.Time `gorm:"default:NULL" json:"deleted_at"`
-	Books	[]Book `gorm:"-" json:"books"`
-	Reviews []Review `gorm:"-" json:"reviews"`
+	ID           uint       `gorm:"primary_key;auto_increment" json:"id"`
+	Avatar       string     `gorm:"size:255;null;DEFAULT:'https://res.cloudinary.com/sajicode/image/upload/v1549973773/avatar.png'" json:"avatar"`
+	FirstName    string     `gorm:"size:255;not null" json:"first_name"`
+	LastName     string     `gorm:"size:255;not null" json:"last_name"`
+	Email        string     `gorm:"not null;unique_index" json:"email"`
+	Password     string     `gorm:"-" json:"password"`
+	PasswordHash string     `gorm:"not null" json:"password_hash"`
+	Remember     string     `gorm:"-" json:"remember"`
+	RememberHash string     `gorm:"not null;unique_index" json:"remember_hash"`
+	CreatedAt    time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt    time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+	DeletedAt    *time.Time `gorm:"default:NULL" json:"deleted_at"`
+	Books        []Book     `gorm:"-" json:"books"`
+	Reviews      []Review   `gorm:"-" json:"reviews"`
 }
 
 // UserDB is used to interact with the users database.
@@ -84,7 +84,7 @@ func NewUserService(db *gorm.DB) UserService {
 	hmac := hash.NewHMAC(hmacSecretKey)
 	uv := newUserValidator(ug, hmac)
 	return &userService{
-		UserDB: uv,
+		UserDB:    uv,
 		pwResetDB: newPwResetValidator(&pwResetGorm{db}, hmac),
 	}
 }
@@ -185,15 +185,15 @@ var _ UserDB = &userValidator{}
 // userValidator struct holds the structure for theuser validation
 type userValidator struct {
 	UserDB
-	hmac hash.HMAC
+	hmac       hash.HMAC
 	emailRegex *regexp.Regexp
 }
 
 // newUserValidator function
 func newUserValidator(udb UserDB, hmac hash.HMAC) *userValidator {
 	return &userValidator{
-		UserDB: udb,
-		hmac: hmac,
+		UserDB:     udb,
+		hmac:       hmac,
 		emailRegex: regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,16}$`),
 	}
 }

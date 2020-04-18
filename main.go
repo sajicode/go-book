@@ -81,6 +81,7 @@ func main() {
 	api.HandleFunc("/users/login", usersController.Login).Methods("POST")
 	api.HandleFunc("/users/update/{id:[0-9]+}", userMw.ApplyFn(usersController.Update)).Methods("POST")
 	api.HandleFunc("/users/{id:[0-9]+}", userMw.ApplyFn(usersController.GetUser)).Methods("GET")
+	api.HandleFunc("/users/info", userMw.ApplyFn(usersController.UserByHash)).Methods("GET")
 	api.HandleFunc("/users/forgot", usersController.InitiateReset).Methods("POST")
 	api.HandleFunc("/users/reset", usersController.CompleteReset).Methods("POST")
 
