@@ -6,6 +6,7 @@ import {
 	REGISTER_SUCCESS,
 	REGISTER_FAIL,
 	USER_LOADED,
+	USER_LOAD_FAIL,
 	CLEAR_ERRORS,
 	LOGIN_SUCCESS,
 	LOGIN_FAIL,
@@ -29,10 +30,24 @@ const AuthState = (props) => {
 
 	// ? don't know if we need this
 	const loadUser = async (data) => {
-		dispatch({
-			type: USER_LOADED,
-			payload: data.data
-		});
+		const config = {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		};
+		try {
+			const token = cookie.get('remember_token');
+			const res = await axios.get(`/api/users/info?token=${token}`, config);
+			dispatch({
+				type: USER_LOADED,
+				payload: res.data.data
+			});
+		} catch (error) {
+			dispatch({
+				type: USER_LOAD_FAIL,
+				payload: error.response.data.message
+			});
+		}
 	};
 
 	//* Register user
@@ -50,7 +65,7 @@ const AuthState = (props) => {
 				type: REGISTER_SUCCESS,
 				payload: res.data
 			});
-			loadUser(res.data);
+			loadUser();
 		} catch (error) {
 			dispatch({
 				type: REGISTER_FAIL,
@@ -75,7 +90,7 @@ const AuthState = (props) => {
 				type: LOGIN_SUCCESS,
 				payload: res.data
 			});
-			loadUser(res.data);
+			loadUser();
 		} catch (error) {
 			dispatch({
 				type: LOGIN_FAIL,
