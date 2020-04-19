@@ -5,7 +5,8 @@ import {
 	LOGIN_FAIL,
 	CLEAR_ERRORS,
 	LOGOUT,
-	USER_LOADED
+	USER_LOADED,
+	USER_LOAD_FAIL
 } from '../types';
 import Cookies from 'universal-cookie';
 
@@ -33,6 +34,7 @@ export default (state, action) => {
 		case REGISTER_FAIL:
 		case LOGIN_FAIL:
 		case LOGOUT:
+		case USER_LOAD_FAIL:
 			//* unset cookie
 			cookie.remove('remember_token');
 			return {
