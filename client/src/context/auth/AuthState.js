@@ -10,7 +10,9 @@ import {
 	CLEAR_ERRORS,
 	LOGIN_SUCCESS,
 	LOGIN_FAIL,
-	LOGOUT
+	LOGOUT,
+	AVATAR_UPLOAD,
+	AVATAR_ERROR
 } from '../types';
 import Cookies from 'universal-cookie';
 
@@ -23,12 +25,12 @@ const AuthState = (props) => {
 		isAuthenticated: cookie.get('remember_token') ? true : false,
 		loading: false,
 		user: null,
-		error: null
+		error: null,
+		avatar: null
 	};
 
 	const [ state, dispatch ] = useReducer(authReducer, initialState);
 
-	// ? don't know if we need this
 	const loadUser = async (data) => {
 		const config = {
 			headers: {
@@ -46,6 +48,33 @@ const AuthState = (props) => {
 			dispatch({
 				type: USER_LOAD_FAIL,
 				payload: error.response.data.message
+			});
+		}
+	};
+
+	//TODO set cloudinary url in env
+	const uploadAvatar = async (e) => {
+		const cloudinaryURL = 'https://api.cloudinary.com/v1_1/sajicode/image/upload';
+		const files = e.target.files;
+		const data = new FormData();
+		data.append('file', files[0]);
+		data.append('upload_preset', 'revbook');
+
+		try {
+			const res = await fetch(cloudinaryURL, {
+				method: 'POST',
+				body: data
+			});
+			const file = await res.json();
+			dispatch({
+				type: AVATAR_UPLOAD,
+				payload: file.secure_url
+			});
+		} catch (error) {
+			console.error('upload error', error);
+			dispatch({
+				type: AVATAR_ERROR,
+				payload: 'Image upload error'
 			});
 		}
 	};
@@ -113,11 +142,13 @@ const AuthState = (props) => {
 				loading: state.loading,
 				error: state.error,
 				user: state.user,
+				avatar: state.avatar,
 				register,
 				login,
 				logout,
 				clearErrors,
-				loadUser
+				loadUser,
+				uploadAvatar
 			}}
 		>
 			{props.children}

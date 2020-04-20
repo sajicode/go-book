@@ -6,7 +6,9 @@ import {
 	CLEAR_ERRORS,
 	LOGOUT,
 	USER_LOADED,
-	USER_LOAD_FAIL
+	USER_LOAD_FAIL,
+	AVATAR_UPLOAD,
+	AVATAR_ERROR
 } from '../types';
 import Cookies from 'universal-cookie';
 
@@ -42,6 +44,16 @@ export default (state, action) => {
 				isAuthenticated: false,
 				loading: false,
 				user: null,
+				error: action.payload
+			};
+		case AVATAR_UPLOAD:
+			return {
+				...state,
+				avatar: action.payload
+			};
+		case AVATAR_ERROR:
+			return {
+				...state,
 				error: action.payload
 			};
 		case CLEAR_ERRORS:

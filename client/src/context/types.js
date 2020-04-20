@@ -16,3 +16,7 @@ export const UPDATE_BOOK = 'UPDATE_BOOK';
 export const CLEAR_BOOKS = 'CLEAR_BOOKS';
 export const CLEAR_BOOK = 'CLEAR_BOOK';
 export const BOOK_ERROR = 'BOOK_ERROR';
+export const AVATAR_UPLOAD = 'AVATAR_UPLOAD';
+export const AVATAR_ERROR = 'AVATAR_UPLOAD_ERROR';
+export const BOOK_UPLOAD = 'BOOK_UPLOAD';
+export const BOOK_UPLOAD_ERROR = 'BOOK_UPLOAD_ERROR';

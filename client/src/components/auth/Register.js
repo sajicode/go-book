@@ -4,7 +4,7 @@ import AuthContext from '../../context/auth/authContext';
 const Register = (props) => {
 	const authContext = useContext(AuthContext);
 
-	const { register, error, isAuthenticated } = authContext;
+	const { register, error, isAuthenticated, avatar, uploadAvatar } = authContext;
 
 	useEffect(
 		() => {
@@ -15,6 +15,8 @@ const Register = (props) => {
 		// eslint-disable-next-line
 		[ error, isAuthenticated, props.history ]
 	);
+
+	console.log('base url', process.env.REACT_APP_BASE_URL);
 
 	const [ user, setUser ] = useState({
 		first_name: '',
@@ -33,7 +35,8 @@ const Register = (props) => {
 			first_name,
 			last_name,
 			email,
-			password
+			password,
+			avatar
 		});
 	};
 
@@ -43,6 +46,11 @@ const Register = (props) => {
 				Account <span className="text-primary">Register</span>
 			</h1>
 			<form onSubmit={onSubmit}>
+				<div className="form-group">
+					<label htmlFor="avatar">Photo</label>
+					<input type="file" name="avatar" onChange={uploadAvatar} placeholder="Upload photo" required />
+					{avatar && <img src={avatar} alt="User Photo Preview" width="70" height="70" />}
+				</div>
 				<div className="form-group">
 					<label htmlFor="first_name">First Name</label>
 					<input type="text" name="first_name" value={first_name} onChange={onChange} required />
