@@ -49,7 +49,7 @@ const Register = (props) => {
 				<div className="form-group">
 					<label htmlFor="avatar">Photo</label>
 					<input type="file" name="avatar" onChange={uploadAvatar} placeholder="Upload photo" required />
-					{avatar && <img src={avatar} alt="User Photo Preview" width="70" height="70" />}
+					{avatar && <img src={avatar} alt="Upload Preview" width="70" height="70" />}
 				</div>
 				<div className="form-group">
 					<label htmlFor="first_name">First Name</label>

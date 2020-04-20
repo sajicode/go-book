@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
-import AuthContext from '../../context/auth/authContext';
 import Books from '../books/Books';
 import BookContext from '../../context/book/bookContext';
 
 const Home = () => {
-	const authContext = useContext(AuthContext);
 	const bookContext = useContext(BookContext);
 
 	const { allState } = bookContext;
