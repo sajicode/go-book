@@ -504,7 +504,7 @@ func (ug *userGorm) Delete(id uint) error {
 func (ug *userGorm) AllUsers(limit, page int) ([]User, error) {
 	dataOffset := (limit * page) - limit
 	var users []User
-	err := ug.db.Limit(limit).Offset(dataOffset).Find(&users).Error
+	err := ug.db.Limit(limit).Offset(dataOffset).Order("created_at DESC", true).Find(&users).Error
 	if err != nil {
 		return nil, err
 	}

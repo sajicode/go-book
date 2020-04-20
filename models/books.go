@@ -208,7 +208,7 @@ func (bg *bookGorm) ByUserID(userID uint) ([]Book, error) {
 func (bg *bookGorm) AllBooks(limit, page int) ([]Book, error) {
 	dataOffset := (limit * page) - limit
 	var books []Book
-	err := bg.db.Preload("User").Limit(limit).Offset(dataOffset).Find(&books).Error
+	err := bg.db.Preload("User").Limit(limit).Offset(dataOffset).Order("created_at DESC", true).Find(&books).Error
 	if err != nil {
 		return nil, err
 	}

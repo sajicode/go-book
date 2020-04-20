@@ -173,7 +173,7 @@ func (rg *reviewGorm) ByUserID(userID uint) ([]Review, error) {
 // ByBookID fetches all reviews for a book
 func (rg *reviewGorm) ByBookID(bookID uint) ([]Review, error) {
 	var reviews []Review
-	err := rg.db.Preload("User").Preload("Book").Where("book_id = ?", bookID).Find(&reviews).Error
+	err := rg.db.Preload("User").Preload("Book").Where("book_id = ?", bookID).Order("created_at DESC", true).Find(&reviews).Error
 	if err != nil {
 		return nil, err
 	}
