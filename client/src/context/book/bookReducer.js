@@ -1,4 +1,13 @@
-import { CREATE_BOOK, GET_BOOK, GET_BOOKS, CLEAR_BOOKS, BOOK_ERROR, CLEAR_BOOK, UPDATE_BOOK } from '../types';
+import {
+	CREATE_BOOK,
+	GET_BOOK,
+	GET_BOOKS,
+	CLEAR_BOOKS,
+	BOOK_ERROR,
+	CLEAR_BOOK,
+	UPDATE_BOOK,
+	BOOK_UPLOAD
+} from '../types';
 
 export default (state, action) => {
 	switch (action.type) {
@@ -41,6 +50,11 @@ export default (state, action) => {
 			return {
 				...state,
 				error: action.payload
+			};
+		case BOOK_UPLOAD:
+			return {
+				...state,
+				bookCover: action.payload
 			};
 		default:
 			return state;

@@ -6,8 +6,11 @@ const Book = () => {
 
 	const { loadUser } = authContext;
 
+	//TODO fetch book data & book reviews
+
 	useEffect(() => {
 		loadUser();
+		// eslint-disable-next-line
 	}, []);
 
 	return (
