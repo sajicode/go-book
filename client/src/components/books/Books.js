@@ -27,8 +27,8 @@ const Books = () => {
 		<Fragment>
 			{isAuthenticated && (
 				<div>
-					<header class="top-banner">
-						<div class="top-banner-inner">
+					<header className="top-banner">
+						<div className="top-banner-inner">
 							<p>
 								<button onClick={() => toggleForm(true)}>Add a Book</button>
 							</p>

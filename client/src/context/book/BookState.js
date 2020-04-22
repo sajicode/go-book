@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import axios from 'axios';
 import BookContext from './bookContext';
 import bookReducer from './bookReducer';
-import { CREATE_BOOK, GET_BOOKS, BOOK_ERROR, BOOK_UPLOAD, BOOK_UPLOAD_ERROR } from '../types';
+import { CREATE_BOOK, GET_BOOKS, BOOK_ERROR, BOOK_UPLOAD, BOOK_UPLOAD_ERROR, GET_BOOK } from '../types';
 
 const BookState = (props) => {
 	const initialState = {
@@ -18,10 +18,25 @@ const BookState = (props) => {
 	//* Get Books
 	const getBooks = async () => {
 		try {
-			const res = await axios.get('/api/books?page=1&limit=20');
-			console.log(res.data);
+			const res = await axios.get('/api/books?page=1&limit=100');
 			dispatch({
 				type: GET_BOOKS,
+				payload: res.data.data
+			});
+		} catch (error) {
+			dispatch({
+				type: BOOK_ERROR,
+				payload: error.response.data.message
+			});
+		}
+	};
+
+	//* Get Book
+	const getBook = async (book_id) => {
+		try {
+			const res = await axios.get(`/api/books/${book_id}`);
+			dispatch({
+				type: GET_BOOK,
 				payload: res.data.data
 			});
 		} catch (error) {
@@ -85,12 +100,12 @@ const BookState = (props) => {
 	return (
 		<BookContext.Provider
 			value={{
-				allState: state,
 				books: state.books,
 				book: state.book,
 				bookCover: state.bookCover,
 				error: state.error,
 				getBooks,
+				getBook,
 				addBook,
 				uploadBookCover
 			}}

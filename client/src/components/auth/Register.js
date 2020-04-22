@@ -9,7 +9,7 @@ const Register = (props) => {
 	useEffect(
 		() => {
 			if (isAuthenticated) {
-				props.history.push('/book');
+				props.history.push('/home');
 			}
 		},
 		// eslint-disable-next-line

@@ -5,7 +5,7 @@ import '../../App.css';
 
 const BookForm = ({ toggle }) => {
 	const bookContext = useContext(BookContext);
-	const { addBook, uploadBookCover, bookCover, getBooks } = bookContext;
+	const { addBook, uploadBookCover, bookCover } = bookContext;
 
 	const [ book, setBook ] = useState({
 		title: '',

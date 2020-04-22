@@ -14,28 +14,31 @@ import Navbar from './components/layout/Navbar';
 import AlertState from './context/alert/AlertState';
 import AuthState from './context/auth/AuthState';
 import BookState from './context/book/BookState';
+import ReviewState from './context/review/ReviewState';
 
 const App = () => {
 	return (
 		<AuthState>
 			<BookState>
-				<AlertState>
-					<Router>
-						<Fragment>
-							<Navbar />
-							<div>
-								<Switch>
-									<PrivateRoute exact path="/book" component={Book} />
-									<Route exact path="/" component={Landing} />
-									<Route exact path="/register" component={Register} />
-									<Route exact path="/login" component={Login} />
-									<Route exact path="/home" component={Home} />
-									<Route component={NotFound} />
-								</Switch>
-							</div>
-						</Fragment>
-					</Router>
-				</AlertState>
+				<ReviewState>
+					<AlertState>
+						<Router>
+							<Fragment>
+								<Navbar />
+								<div>
+									<Switch>
+										<PrivateRoute exact path="/book/:id" component={Book} />
+										<Route exact path="/" component={Landing} />
+										<Route exact path="/register" component={Register} />
+										<Route exact path="/login" component={Login} />
+										<Route exact path="/home" component={Home} />
+										<Route component={NotFound} />
+									</Switch>
+								</div>
+							</Fragment>
+						</Router>
+					</AlertState>
+				</ReviewState>
 			</BookState>
 		</AuthState>
 	);

@@ -4,13 +4,12 @@ import AuthContext from '../../context/auth/authContext';
 const Login = (props) => {
 	const authContext = useContext(AuthContext);
 
-	const { login, error, isAuthenticated, allState } = authContext;
-	console.log('login page', allState);
+	const { login, error, isAuthenticated } = authContext;
 
 	useEffect(
 		() => {
 			if (isAuthenticated) {
-				props.history.push('/book');
+				props.history.push('/home');
 			}
 		},
 		// eslint-disable-next-line

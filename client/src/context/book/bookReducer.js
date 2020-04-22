@@ -22,7 +22,6 @@ export default (state, action) => {
 				book: action.payload
 			};
 		case GET_BOOKS:
-			console.log('GET BOoks', state);
 			return {
 				...state,
 				books: action.payload,
