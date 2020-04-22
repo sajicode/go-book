@@ -1,6 +1,11 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment/min/moment-with-locales';
+import Moment from 'react-moment';
 import AuthContext from '../../context/auth/authContext';
+
+Moment.globalMoment = moment;
+Moment.globalFormat = 'D MMMM YYYY HH:mm';
 
 const BookDetails = ({ book: { title, image, author, category, summary, user, created_at } }) => {
 	const authContext = useContext(AuthContext);
@@ -15,7 +20,7 @@ const BookDetails = ({ book: { title, image, author, category, summary, user, cr
 			<p>{summary}</p>
 			<p>
 				Posted By: {user.first_name || authUser.first_name} {user.last_name || authUser.last_name} on{' '}
-				{created_at}
+				<Moment>{created_at}</Moment>
 			</p>
 		</div>
 	);

@@ -1,7 +1,12 @@
 import React, { useContext, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import moment from 'moment/min/moment-with-locales';
+import Moment from 'react-moment';
 import AuthContext from '../../context/auth/authContext';
+
+Moment.globalMoment = moment;
+Moment.globalFormat = 'D MMMM YYYY HH:mm';
 
 const BookItem = ({ book }) => {
 	const authContext = useContext(AuthContext);
@@ -22,7 +27,7 @@ const BookItem = ({ book }) => {
 					<p>{summary}</p>
 					<p>
 						Posted By: {user.first_name || authUser.first_name} {user.last_name || authUser.last_name} on{' '}
-						{created_at}
+						<Moment>{created_at}</Moment>
 					</p>
 				</div>
 			) : (
@@ -34,7 +39,7 @@ const BookItem = ({ book }) => {
 					<p>{summary}</p>
 					<p>
 						Posted By: {user.first_name || authUser.first_name} {user.last_name || authUser.last_name} on{' '}
-						{created_at}
+						<Moment>{created_at}</Moment>
 					</p>
 				</div>
 			)}
