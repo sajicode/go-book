@@ -1,15 +1,25 @@
 import React, { useState, useContext, useEffect } from 'react';
 import AuthContext from '../../context/auth/authContext';
+import AlertContext from '../../context/alert/alertContext';
 
 const Login = (props) => {
 	const authContext = useContext(AuthContext);
+	const alertContext = useContext(AlertContext);
 
-	const { login, error, isAuthenticated } = authContext;
+	const { login, error, isAuthenticated, clearErrors } = authContext;
+	const { setAlert } = alertContext;
 
 	useEffect(
 		() => {
 			if (isAuthenticated) {
 				props.history.push('/home');
+			}
+			if (error === 'resource not found') {
+				setAlert('User not found', 'danger');
+				clearErrors();
+			} else if (error === 'incorrect password provided') {
+				setAlert(error, 'danger');
+				clearErrors();
 			}
 		},
 		// eslint-disable-next-line
@@ -28,7 +38,7 @@ const Login = (props) => {
 	const onSubmit = (e) => {
 		e.preventDefault();
 		if (email === '' || password === '') {
-			console.log('Please enter all fields');
+			setAlert('Please input all fields', 'danger');
 		} else {
 			login({
 				email,

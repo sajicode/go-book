@@ -1,22 +1,28 @@
 import React, { useState, useContext, useEffect } from 'react';
 import AuthContext from '../../context/auth/authContext';
+import AlertContext from '../../context/alert/alertContext';
 
 const Register = (props) => {
 	const authContext = useContext(AuthContext);
+	const alertContext = useContext(AlertContext);
 
-	const { register, error, isAuthenticated, avatar, uploadAvatar } = authContext;
+	const { register, error, isAuthenticated, avatar, uploadAvatar, clearErrors } = authContext;
+	const { setAlert } = alertContext;
 
 	useEffect(
 		() => {
 			if (isAuthenticated) {
 				props.history.push('/home');
 			}
+
+			if (error === 'email address is already taken') {
+				setAlert(error, 'danger');
+				clearErrors();
+			}
 		},
 		// eslint-disable-next-line
 		[ error, isAuthenticated, props.history ]
 	);
-
-	console.log('base url', process.env.REACT_APP_BASE_URL);
 
 	const [ user, setUser ] = useState({
 		first_name: '',
@@ -48,7 +54,7 @@ const Register = (props) => {
 			<form onSubmit={onSubmit}>
 				<div className="form-group">
 					<label htmlFor="avatar">Photo</label>
-					<input type="file" name="avatar" onChange={uploadAvatar} placeholder="Upload photo" required />
+					<input type="file" name="avatar" onChange={uploadAvatar} placeholder="Upload photo" />
 					{avatar && <img src={avatar} alt="Upload Preview" width="70" height="70" />}
 				</div>
 				<div className="form-group">

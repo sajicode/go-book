@@ -10,6 +10,7 @@ import Book from './components/books/Book';
 import Home from './components/pages/Home';
 import NotFound from './components/pages/NotFound';
 import Navbar from './components/layout/Navbar';
+import Alerts from './components/layout/Alerts';
 
 import AlertState from './context/alert/AlertState';
 import AuthState from './context/auth/AuthState';
@@ -26,6 +27,7 @@ const App = () => {
 							<Fragment>
 								<Navbar />
 								<div>
+									<Alerts />
 									<Switch>
 										<PrivateRoute exact path="/book/:id" component={Book} />
 										<Route exact path="/" component={Landing} />

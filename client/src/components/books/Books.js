@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, Fragment, useState } from 'react';
 import BookContext from '../../context/book/bookContext';
 import AuthContext from '../../context/auth/authContext';
+import AlertContext from '../../context/alert/alertContext';
 import BookItem from './BookItem';
 import BookForm from './BookForm';
 import Spinner from '../layout/Spinner';
@@ -10,14 +11,23 @@ const Books = () => {
 	const [ showForm, setShowForm ] = useState(false);
 	const bookContext = useContext(BookContext);
 	const authContext = useContext(AuthContext);
+	const alertContext = useContext(AlertContext);
 
 	const { books, getBooks, loading } = bookContext;
-	const { isAuthenticated } = authContext;
+	const { isAuthenticated, error, clearErrors } = authContext;
+	const { setAlert } = alertContext;
 
-	useEffect(() => {
-		getBooks();
-		// eslint-disable-next-line
-	}, []);
+	useEffect(
+		() => {
+			getBooks();
+
+			if (error === 'Unauthorized. Login to access this page') {
+				setAlert('Create an account or Login to view book reviews', 'primary', 60000);
+				clearErrors();
+			}
+		},
+		[ error ]
+	);
 
 	const toggleForm = (status) => {
 		setShowForm(status);
