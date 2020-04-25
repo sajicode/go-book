@@ -25,6 +25,7 @@ type User struct {
 	FirstName    string     `gorm:"size:255;not null" json:"first_name"`
 	LastName     string     `gorm:"size:255;not null" json:"last_name"`
 	Email        string     `gorm:"not null;unique_index" json:"email"`
+	Bio          string     `gorm:"default:NULL" json:"bio"`
 	Password     string     `gorm:"-" json:"password"`
 	PasswordHash string     `gorm:"not null" json:"password_hash"`
 	Remember     string     `gorm:"-" json:"remember"`

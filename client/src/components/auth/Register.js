@@ -28,10 +28,11 @@ const Register = (props) => {
 		first_name: '',
 		last_name: '',
 		email: '',
-		password: ''
+		password: '',
+		bio: ''
 	});
 
-	const { first_name, last_name, email, password } = user;
+	const { first_name, last_name, email, password, bio } = user;
 
 	const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
 
@@ -42,7 +43,8 @@ const Register = (props) => {
 			last_name,
 			email,
 			password,
-			avatar
+			avatar,
+			bio
 		});
 	};
 
@@ -64,6 +66,10 @@ const Register = (props) => {
 				<div className="form-group">
 					<label htmlFor="last_name">Last Name</label>
 					<input type="text" name="last_name" value={last_name} onChange={onChange} required />
+				</div>
+				<div className="form-group">
+					<label htmlFor="bio">Bio</label>
+					<input type="text" name="bio" value={bio} onChange={onChange} />
 				</div>
 				<div className="form-group">
 					<label htmlFor="email">Email</label>
