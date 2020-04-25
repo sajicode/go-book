@@ -137,7 +137,7 @@ func (b *Books) GetAllBooks(w http.ResponseWriter, r *http.Request) {
 	pageStr := r.URL.Query().Get("page")
 
 	if limitStr == "" {
-		limitStr = "10"
+		limitStr = "20"
 	}
 
 	if pageStr == "" {

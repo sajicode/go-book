@@ -2,11 +2,16 @@ package middleware
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/sajicode/go-book/context"
+	"github.com/sajicode/go-book/logger"
 	"github.com/sajicode/go-book/models"
 	util "github.com/sajicode/go-book/utils"
 )
+
+//* logger
+var slogger = logger.NewLogger()
 
 // User struct
 type User struct {
@@ -24,13 +29,24 @@ func (u *User) ApplyFn(next http.HandlerFunc) http.HandlerFunc {
 
 		cookie, err := r.Cookie("remember_token")
 		if err != nil {
+			slogger.InvalidRequest(err.Error())
 			w.Header().Add("Content-Type", "application/json")
 			w.WriteHeader(http.StatusUnauthorized)
 			util.Respond(w, util.Fail("fail", "Unauthorized. Login to access this page"))
 			return
 		}
-		user, err := u.UserService.ByRemember(cookie.Value)
+		cookieData, err := url.QueryUnescape(cookie.Value)
 		if err != nil {
+			slogger.InvalidRequest(err.Error())
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnauthorized)
+			util.Respond(w, util.Fail("fail", "Unauthorized. Login to access this page"))
+			return
+		}
+
+		user, err := u.UserService.ByRemember(cookieData)
+		if err != nil {
+			slogger.InvalidRequest(err.Error())
 			w.Header().Add("Content-Type", "application/json")
 			w.WriteHeader(http.StatusUnauthorized)
 			util.Respond(w, util.Fail("fail", "Unauthorized. Login to access this page"))

@@ -1,0 +1,255 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+/* Global Styles */
+:root {
+	--primary-color: #eeba6d;
+	--dark-color: #333333;
+	--light-color: #f4f4f4;
+	--danger-color: #dc3545;
+	--success-color: #28a745;
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: 'Roboto', sans-serif;
+	font-size: 1rem;
+	line-height: 1.6;
+	background-color: #fff;
+	color: #333;
+}
+
+a {
+	color: var(--dark-color);
+	text-decoration: none;
+}
+
+a:hover {
+	color: #666;
+}
+
+ul {
+	list-style: none;
+}
+/* 
+img {
+	width: 100%;
+} */
+
+/* Utilities */
+.container {
+	max-width: 1100px;
+	margin: auto;
+	overflow: hidden;
+	padding: 0 2rem;
+}
+
+/* Text Styles*/
+.x-large {
+	font-size: 4rem;
+	line-height: 1.2;
+	margin-bottom: 1rem;
+}
+
+.large {
+	font-size: 3rem;
+	line-height: 1.2;
+	margin-bottom: 1rem;
+}
+
+.lead {
+	font-size: 1.5rem;
+	margin-bottom: 1rem;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.text-primary {
+	color: var(--primary-color);
+}
+
+.text-dark {
+	color: var(--dark-color);
+}
+
+.text-center {
+	text-align: center;
+}
+
+.text-right {
+	text-align: right;
+}
+
+.text-left {
+	text-align: left;
+}
+
+.App {
+	text-align: center;
+}
+
+.App-logo {
+	height: 40vmin;
+	pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.App-logo {
+		animation: App-logo-spin infinite 20s linear;
+	}
+}
+
+.App-header {
+	background-color: #282c34;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: calc(10px + 2vmin);
+	color: white;
+}
+
+.App-link {
+	color: #61dafb;
+}
+
+/* Modal styles */
+button {
+	padding: 0.5em 0.7em;
+	border: 1px solid #8d8d8d;
+	background-color: white;
+	font-size: 1em;
+	cursor: pointer;
+}
+
+.top-banner {
+	padding: 1em 0;
+	background-color: #ffd698;
+}
+
+.top-banner-inner {
+	width: 80%;
+	max-width: 1000px;
+	margin: 0 auto;
+}
+
+.modal-backdrop {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 1;
+}
+
+.modal-body {
+	position: fixed;
+	top: 3em;
+	bottom: 3em;
+	right: 20%;
+	left: 20%;
+	padding: 2em 3em;
+	background-color: white;
+	overflow: auto;
+	z-index: 2;
+}
+
+.modal-close {
+	cursor: pointer;
+	position: absolute;
+	top: 0.3em;
+	right: 0.3em;
+	padding: 0.3em;
+	font-size: 2em;
+	height: 1em;
+	width: 1em;
+	text-indent: 10em;
+	overflow: hidden;
+	border: 0;
+}
+
+.modal-close::after {
+	position: absolute;
+	line-height: 0.5;
+	top: 0.2em;
+	left: 0.1em;
+	text-indent: 0;
+	/* unicode character for multiply */
+	content: "\00D7";
+}
+
+/* Alerts */
+
+.alert {
+	padding: 0.7rem;
+	margin: 1rem 0;
+	opacity: 0.9;
+	background: var(--light-color);
+	color: #333;
+}
+
+.btn-primary,
+.bg-primary,
+.badge-primary,
+.alert-primary {
+	background: var(--primary-color);
+	color: #fff;
+}
+
+.btn-light,
+.bg-light,
+.badge-light,
+.alert-light {
+	background: var(--light-color);
+	color: #333;
+}
+
+.btn-dark,
+.bg-dark,
+.badge-dark,
+.alert-dark {
+	background: var(--dark-color);
+	color: #fff;
+}
+
+.btn-danger,
+.bg-danger,
+.badge-danger,
+.alert-danger {
+	background: var(--danger-color);
+	color: #fff;
+}
+
+.btn-success,
+.bg-success,
+.badge-success,
+.alert-success {
+	background: var(--success-color);
+	color: rgb(38, 218, 68);
+}
+
+.btn-white,
+.bg-white,
+.badge-white,
+.alert-white {
+	background: #fff;
+	color: #333;
+	border: #ccc solid 1px;
+}
+
+@keyframes App-logo-spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
