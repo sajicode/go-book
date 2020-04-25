@@ -23,9 +23,13 @@ const Navbar = ({ title, icon }) => {
 				<Link to="/home">Home</Link>
 			</li>
 			<li>
-				Hello {user && user.first_name}
+				Hello {user && <Link to={`/user/${user.id}`}>{user.first_name}</Link>}
 				<span>
-					{user && <img src={user.avatar} alt={user.first_name + 'image'} height="40px" width="40px" />}
+					{user && (
+						<Link to={`/user/${user.id}`}>
+							<img src={user.avatar} alt={user.first_name + 'image'} height="40px" width="40px" />
+						</Link>
+					)}
 				</span>
 			</li>
 			<li>
@@ -54,7 +58,7 @@ const Navbar = ({ title, icon }) => {
 		<div className="navbar bg-primary">
 			<h1>
 				<i className={icon} />
-				{title}
+				<Link to="/">{title}</Link>
 			</h1>
 			<ul>{isAuthenticated ? authLinks : guestLinks}</ul>
 		</div>

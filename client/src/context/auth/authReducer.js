@@ -8,7 +8,9 @@ import {
 	USER_LOADED,
 	USER_LOAD_FAIL,
 	AVATAR_UPLOAD,
-	AVATAR_ERROR
+	AVATAR_ERROR,
+	GET_USER,
+	GET_USER_FAIL
 } from '../types';
 import Cookies from 'universal-cookie';
 
@@ -21,7 +23,8 @@ export default (state, action) => {
 				...state,
 				isAuthenticated: true,
 				loading: false,
-				user: action.payload
+				user: action.payload,
+				bookUser: null
 			};
 		case REGISTER_SUCCESS:
 		case LOGIN_SUCCESS:
@@ -60,6 +63,16 @@ export default (state, action) => {
 			return {
 				...state,
 				error: null
+			};
+		case GET_USER:
+			return {
+				...state,
+				bookUser: action.payload
+			};
+		case GET_USER_FAIL:
+			return {
+				...state,
+				error: action.payload
 			};
 		default:
 			return state;

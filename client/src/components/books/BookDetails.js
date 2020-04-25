@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import moment from 'moment/min/moment-with-locales';
 import Moment from 'react-moment';
@@ -19,8 +20,11 @@ const BookDetails = ({ book: { title, image, author, category, summary, user, cr
 			<h3>{category}</h3>
 			<p>{summary}</p>
 			<p>
-				Posted By: {user.first_name || authUser.first_name} {user.last_name || authUser.last_name} on{' '}
-				<Moment>{created_at}</Moment>
+				Posted By:{' '}
+				<Link to={`/user/${user.id}`}>
+					{user.first_name || authUser.first_name} {user.last_name || authUser.last_name}
+				</Link>{' '}
+				on <Moment>{created_at}</Moment>
 			</p>
 		</div>
 	);

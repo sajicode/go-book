@@ -11,6 +11,7 @@ import Home from './components/pages/Home';
 import NotFound from './components/pages/NotFound';
 import Navbar from './components/layout/Navbar';
 import Alerts from './components/layout/Alerts';
+import User from './components/user/User';
 
 import AlertState from './context/alert/AlertState';
 import AuthState from './context/auth/AuthState';
@@ -30,6 +31,7 @@ const App = () => {
 									<Alerts />
 									<Switch>
 										<PrivateRoute exact path="/book/:id" component={Book} />
+										<PrivateRoute exact path="/user/:id" component={User} />
 										<Route exact path="/" component={Landing} />
 										<Route exact path="/register" component={Register} />
 										<Route exact path="/login" component={Login} />

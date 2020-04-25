@@ -12,7 +12,9 @@ import {
 	LOGIN_FAIL,
 	LOGOUT,
 	AVATAR_UPLOAD,
-	AVATAR_ERROR
+	AVATAR_ERROR,
+	GET_USER,
+	GET_USER_FAIL
 } from '../types';
 import Cookies from 'universal-cookie';
 
@@ -26,7 +28,8 @@ const AuthState = (props) => {
 		loading: false,
 		user: null,
 		error: null,
-		avatar: null
+		avatar: null,
+		bookUser: null
 	};
 
 	const [ state, dispatch ] = useReducer(authReducer, initialState);
@@ -128,6 +131,22 @@ const AuthState = (props) => {
 		}
 	};
 
+	//* Get a User
+	const getUser = async (id) => {
+		try {
+			const res = await axios.get(`/api/users/${id}`);
+			dispatch({
+				type: GET_USER,
+				payload: res.data.data
+			});
+		} catch (error) {
+			dispatch({
+				type: GET_USER_FAIL,
+				payload: error.response.data.message
+			});
+		}
+	};
+
 	//* Logout
 	const logout = () => dispatch({ type: LOGOUT });
 
@@ -142,9 +161,11 @@ const AuthState = (props) => {
 				error: state.error,
 				user: state.user,
 				avatar: state.avatar,
+				bookUser: state.bookUser,
 				register,
 				login,
 				logout,
+				getUser,
 				clearErrors,
 				loadUser,
 				uploadAvatar

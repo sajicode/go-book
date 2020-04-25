@@ -26,8 +26,11 @@ const BookItem = ({ book }) => {
 					<h3>{category}</h3>
 					<p>{summary}</p>
 					<p>
-						Posted By: {user.first_name || authUser.first_name} {user.last_name || authUser.last_name} on{' '}
-						<Moment>{created_at}</Moment>
+						Posted By:{' '}
+						<Link to={`/user/${id}`}>
+							{user.first_name || authUser.first_name} {user.last_name || authUser.last_name}
+						</Link>{' '}
+						on <Moment>{created_at}</Moment>
 					</p>
 				</div>
 			) : (
