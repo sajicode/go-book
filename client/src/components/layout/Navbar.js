@@ -20,6 +20,9 @@ const Navbar = ({ title, icon }) => {
 	const authLinks = (
 		<Fragment>
 			<li>
+				<Link to="/home">Home</Link>
+			</li>
+			<li>
 				Hello {user && user.first_name}
 				<span>
 					{user && <img src={user.avatar} alt={user.first_name + 'image'} height="40px" width="40px" />}
@@ -35,6 +38,9 @@ const Navbar = ({ title, icon }) => {
 
 	const guestLinks = (
 		<Fragment>
+			<li>
+				<Link to="/home">Home</Link>
+			</li>
 			<li>
 				<Link to="/register">Register</Link>
 			</li>
