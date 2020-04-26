@@ -10,7 +10,7 @@ import (
 const (
 	welcomeSubject = "Welcome to Literary Reviews"
 	resetSubject   = "Instructions for resetting your password."
-	resetBaseURL   = "http://localhost:7300/users/reset"
+	resetBaseURL   = "https://revbook13420.herokuapp.com/reset"
 )
 
 const welcomeText = `Hi there!

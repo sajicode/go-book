@@ -14,7 +14,10 @@ import {
 	AVATAR_UPLOAD,
 	AVATAR_ERROR,
 	GET_USER,
-	GET_USER_FAIL
+	GET_USER_FAIL,
+	TRIGGER_SUCCESS,
+	ALL_ERRORS,
+	RESET_SUCCESS
 } from '../types';
 import Cookies from 'universal-cookie';
 
@@ -29,12 +32,13 @@ const AuthState = (props) => {
 		user: null,
 		error: null,
 		avatar: null,
-		bookUser: null
+		bookUser: null,
+		message: null
 	};
 
 	const [ state, dispatch ] = useReducer(authReducer, initialState);
 
-	const loadUser = async (data) => {
+	const loadUser = async () => {
 		const config = {
 			headers: {
 				'Content-Type': 'application/json'
@@ -172,6 +176,48 @@ const AuthState = (props) => {
 		}
 	};
 
+	//* Trigger password reset
+	const triggerReset = async (formData) => {
+		const config = {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		};
+		try {
+			const res = await axios.post(`/api/users/forgot`, formData, config);
+			dispatch({
+				type: TRIGGER_SUCCESS,
+				payload: res.data.data.message
+			});
+		} catch (error) {
+			dispatch({
+				type: ALL_ERRORS,
+				payload: error.response.data.message
+			});
+		}
+	};
+
+	//* Reset password
+	const resetPassword = async (formData, token) => {
+		const config = {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		};
+		try {
+			const res = await axios.post(`/api/users/reset?token=${token}`, formData, config);
+			dispatch({
+				type: RESET_SUCCESS,
+				payload: res.data
+			});
+		} catch (error) {
+			dispatch({
+				type: ALL_ERRORS,
+				payload: error.response.data.message
+			});
+		}
+	};
+
 	//* Logout
 	const logout = () => dispatch({ type: LOGOUT });
 
@@ -187,6 +233,7 @@ const AuthState = (props) => {
 				user: state.user,
 				avatar: state.avatar,
 				bookUser: state.bookUser,
+				message: state.message,
 				register,
 				login,
 				logout,
@@ -194,6 +241,8 @@ const AuthState = (props) => {
 				updateUser,
 				clearErrors,
 				loadUser,
+				triggerReset,
+				resetPassword,
 				uploadAvatar
 			}}
 		>

@@ -17,6 +17,8 @@ import AlertState from './context/alert/AlertState';
 import AuthState from './context/auth/AuthState';
 import BookState from './context/book/BookState';
 import ReviewState from './context/review/ReviewState';
+import ForgotPassword from './components/auth/ForgotPassword';
+import ResetPassword from './components/auth/ResetPassword';
 
 const App = () => {
 	return (
@@ -36,6 +38,8 @@ const App = () => {
 										<Route exact path="/register" component={Register} />
 										<Route exact path="/login" component={Login} />
 										<Route exact path="/home" component={Home} />
+										<Route exact path="/forgot" component={ForgotPassword} />
+										<Route exact path="/reset" component={ResetPassword} />
 										<Route component={NotFound} />
 									</Switch>
 								</div>

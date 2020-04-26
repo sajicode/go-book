@@ -1,63 +1,56 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import AuthContext from '../../context/auth/authContext';
 import AlertContext from '../../context/alert/alertContext';
 
-const Login = (props) => {
+const ResetPassword = (props) => {
 	const authContext = useContext(AuthContext);
 	const alertContext = useContext(AlertContext);
 
-	const { login, error, isAuthenticated, clearErrors } = authContext;
+	const { error, clearErrors, resetPassword, isAuthenticated } = authContext;
 	const { setAlert } = alertContext;
+
+	const params = new URLSearchParams(window.location.search);
+	const token = params.get('token');
 
 	useEffect(
 		() => {
 			if (isAuthenticated) {
 				props.history.push('/home');
 			}
-			if (error === 'resource not found') {
-				setAlert('User not found', 'danger');
-				clearErrors();
-			} else if (error === 'incorrect password provided') {
+			if (error && error !== 'Unauthorized. Login to access this page') {
 				setAlert(error, 'danger');
 				clearErrors();
 			}
 		},
-		// eslint-disable-next-line
 		[ error, isAuthenticated, props.history ]
 	);
 
 	const [ user, setUser ] = useState({
-		email: '',
 		password: ''
 	});
 
-	const { email, password } = user;
+	const { password } = user;
 
 	const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
 
 	const onSubmit = (e) => {
 		e.preventDefault();
-		if (email === '' || password === '') {
+		if (password === '') {
 			setAlert('Please input all fields', 'danger');
 		} else {
-			login({
-				email,
-				password
-			});
+			resetPassword(
+				{
+					password
+				},
+				token
+			);
 		}
 	};
 
 	return (
 		<div className="form-container">
-			<h1>
-				Account <span className="text-primary">Login</span>
-			</h1>
+			<h1>Enter a new Password</h1>
 			<form onSubmit={onSubmit}>
-				<div className="form-group">
-					<label htmlFor="email">Email</label>
-					<input type="email" name="email" value={email} onChange={onChange} required />
-				</div>
 				<div className="form-group">
 					<label htmlFor="password">Password</label>
 					<input
@@ -69,14 +62,10 @@ const Login = (props) => {
 						minLength="8"
 					/>
 				</div>
-				<input type="submit" value="Login" className="btn btn-primary btn-block" />
+				<input type="submit" value="Reset" className="btn btn-primary btn-block" />
 			</form>
-
-			<div className="forgot-link">
-				Forgot Password ? <Link to="/forgot">Click here to reset</Link>
-			</div>
 		</div>
 	);
 };
 
-export default Login;
+export default ResetPassword;

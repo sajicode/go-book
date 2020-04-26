@@ -10,7 +10,10 @@ import {
 	AVATAR_UPLOAD,
 	AVATAR_ERROR,
 	GET_USER,
-	GET_USER_FAIL
+	GET_USER_FAIL,
+	TRIGGER_SUCCESS,
+	ALL_ERRORS,
+	RESET_SUCCESS
 } from '../types';
 import Cookies from 'universal-cookie';
 
@@ -28,6 +31,7 @@ export default (state, action) => {
 			};
 		case REGISTER_SUCCESS:
 		case LOGIN_SUCCESS:
+		case RESET_SUCCESS:
 			//* set cookie
 			cookie.set('remember_token', action.payload.data.remember, { path: '/' });
 			return {
@@ -70,6 +74,16 @@ export default (state, action) => {
 				bookUser: action.payload
 			};
 		case GET_USER_FAIL:
+			return {
+				...state,
+				error: action.payload
+			};
+		case TRIGGER_SUCCESS:
+			return {
+				...state,
+				message: action.payload
+			};
+		case ALL_ERRORS:
 			return {
 				...state,
 				error: action.payload

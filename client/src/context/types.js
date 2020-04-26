@@ -29,3 +29,6 @@ export const UPDATE_REVIEW = 'UPDATE_REVIEW';
 export const CLEAR_REVIEWS = 'CLEAR_REVIEWS';
 export const CLEAR_REVIEW = 'CLEAR_REVIEW';
 export const REVIEW_ERROR = 'REVIEW_ERROR';
+export const TRIGGER_SUCCESS = 'TRIGGER_SUCCESS';
+export const ALL_ERRORS = 'ALL_ERRORS';
+export const RESET_SUCCESS = 'RESET_SUCCESS';
