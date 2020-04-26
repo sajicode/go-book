@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	"github.com/sajicode/go-book/controllers"
@@ -105,7 +106,12 @@ func main() {
 	appPort := fmt.Sprintf(":%s", os.Getenv("PORT"))
 	fmt.Println("Starting Server on PORT " + appPort)
 
-	http.ListenAndServe(appPort, r)
+	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Set-Cookie", "Cookie"})
+	originsOk := handlers.AllowedOrigins([]string{os.Getenv("ORIGIN_ALLOWED"), "https://revbook13420.herokuapp.com"})
+	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
+	credOk := handlers.AllowCredentials()
+
+	http.ListenAndServe(appPort, handlers.CORS(headersOk, originsOk, methodsOk, credOk)(r))
 }
 
 func hello(w http.ResponseWriter, r *http.Request) {

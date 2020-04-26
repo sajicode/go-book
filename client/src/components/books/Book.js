@@ -15,6 +15,8 @@ const Book = (props) => {
 	const { reviews, getBookReviews } = reviewContext;
 	const bookID = props.match.params.id;
 
+	console.log('Book ID', bookID);
+
 	useEffect(() => {
 		getBook(bookID);
 		getBookReviews(bookID);
