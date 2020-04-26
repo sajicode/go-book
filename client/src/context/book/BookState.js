@@ -3,6 +3,7 @@ import axios from 'axios';
 import BookContext from './bookContext';
 import bookReducer from './bookReducer';
 import { CREATE_BOOK, GET_BOOKS, BOOK_ERROR, BOOK_UPLOAD, BOOK_UPLOAD_ERROR, GET_BOOK } from '../types';
+import { serverURL } from '../../utils/helper';
 
 const BookState = (props) => {
 	const initialState = {
@@ -18,7 +19,7 @@ const BookState = (props) => {
 	//* Get Books
 	const getBooks = async () => {
 		try {
-			const res = await axios.get('/api/books?page=1&limit=100');
+			const res = await axios.get(`${serverURL}/api/books?page=1&limit=100`);
 			dispatch({
 				type: GET_BOOKS,
 				payload: res.data.data
@@ -34,7 +35,7 @@ const BookState = (props) => {
 	//* Get Book
 	const getBook = async (book_id) => {
 		try {
-			const res = await axios.get(`/api/books/${book_id}`);
+			const res = await axios.get(`${serverURL}/api/books/${book_id}`, { withCredentials: true });
 			dispatch({
 				type: GET_BOOK,
 				payload: res.data.data
@@ -52,11 +53,12 @@ const BookState = (props) => {
 		const config = {
 			headers: {
 				'Content-Type': 'application/json'
-			}
+			},
+			withCredentials: true
 		};
 
 		try {
-			const res = await axios.post(`/api/books/new`, formData, config);
+			const res = await axios.post(`${serverURL}/api/books/new`, formData, config);
 
 			dispatch({
 				type: CREATE_BOOK,

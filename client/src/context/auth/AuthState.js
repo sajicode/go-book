@@ -14,11 +14,10 @@ import {
 	AVATAR_UPLOAD,
 	AVATAR_ERROR
 } from '../types';
+import { serverURL } from '../../utils/helper';
 import Cookies from 'universal-cookie';
 
 const cookie = new Cookies();
-
-// const serverURL = 'https://revbook13420.herokuapp.com';
 
 const AuthState = (props) => {
 	const initialState = {
@@ -31,15 +30,16 @@ const AuthState = (props) => {
 
 	const [ state, dispatch ] = useReducer(authReducer, initialState);
 
-	const loadUser = async (data) => {
+	const loadUser = async () => {
 		const config = {
 			headers: {
 				'Content-Type': 'application/json'
-			}
+			},
+			withCredentials: true
 		};
 		try {
 			const token = cookie.get('remember_token');
-			const res = await axios.get(`/api/users/info?token=${token}`, config);
+			const res = await axios.get(`${serverURL}/api/users/info?token=${token}`, config);
 			dispatch({
 				type: USER_LOADED,
 				payload: res.data.data
@@ -84,11 +84,12 @@ const AuthState = (props) => {
 		const config = {
 			headers: {
 				'Content-Type': 'application/json'
-			}
+			},
+			withCredentials: true
 		};
 
 		try {
-			const res = await axios.post(`/api/users/signup`, formData, config);
+			const res = await axios.post(`${serverURL}/api/users/signup`, formData, config);
 
 			dispatch({
 				type: REGISTER_SUCCESS,
@@ -108,11 +109,12 @@ const AuthState = (props) => {
 		const config = {
 			headers: {
 				'Content-Type': 'application/json'
-			}
+			},
+			withCredentials: true
 		};
 
 		try {
-			const res = await axios.post(`/api/users/login`, formData, config);
+			const res = await axios.post(`${serverURL}/api/users/login`, formData, config);
 
 			cookie.set('remember_token', res.data.data.remember, { path: '/' });
 			dispatch({

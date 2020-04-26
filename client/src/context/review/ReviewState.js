@@ -3,6 +3,7 @@ import axios from 'axios';
 import ReviewContext from './reviewContext';
 import reviewReducer from './reviewReducer';
 import { CREATE_REVIEW, GET_REVIEWS, REVIEW_ERROR } from '../types';
+import { serverURL } from '../../utils/helper';
 
 const ReviewState = (props) => {
 	const initialState = {
@@ -17,7 +18,7 @@ const ReviewState = (props) => {
 	//* Get Reviews
 	const getBookReviews = async (bookID) => {
 		try {
-			const res = await axios.get(`/api/books/${bookID}/reviews`);
+			const res = await axios.get(`${serverURL}/api/books/${bookID}/reviews`, { withCredentials: true });
 			dispatch({
 				type: GET_REVIEWS,
 				payload: res.data.data
@@ -35,11 +36,12 @@ const ReviewState = (props) => {
 		const config = {
 			headers: {
 				'Content-Type': 'application/json'
-			}
+			},
+			withCredentials: true
 		};
 
 		try {
-			const res = await axios.post(`/api/books/${bookID}/review`, formData, config);
+			const res = await axios.post(`${serverURL}/api/books/${bookID}/review`, formData, config);
 			console.log('forms', formData);
 			dispatch({
 				type: CREATE_REVIEW,
