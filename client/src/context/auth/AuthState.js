@@ -131,6 +131,31 @@ const AuthState = (props) => {
 		}
 	};
 
+	//* Update a user
+	const updateUser = async (formData, id) => {
+		const config = {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		};
+
+		try {
+			const res = await axios.post(`/api/users/update/${id}`, formData, config);
+
+			cookie.set('remember_token', res.data.data.remember, { path: '/' });
+			dispatch({
+				type: USER_LOADED,
+				payload: res.data.data
+			});
+			loadUser();
+		} catch (error) {
+			dispatch({
+				type: USER_LOAD_FAIL,
+				payload: error.response.data.message
+			});
+		}
+	};
+
 	//* Get a User
 	const getUser = async (id) => {
 		try {
@@ -166,6 +191,7 @@ const AuthState = (props) => {
 				login,
 				logout,
 				getUser,
+				updateUser,
 				clearErrors,
 				loadUser,
 				uploadAvatar
