@@ -20,10 +20,9 @@ import {
 	RESET_SUCCESS
 } from '../types';
 import Cookies from 'universal-cookie';
+import { serverURL } from '../../utils/helper';
 
 const cookie = new Cookies();
-
-// const serverURL = 'https://revbook13420.herokuapp.com';
 
 const AuthState = (props) => {
 	const initialState = {
@@ -42,11 +41,12 @@ const AuthState = (props) => {
 		const config = {
 			headers: {
 				'Content-Type': 'application/json'
-			}
+			},
+			withCredentials: true,
 		};
 		try {
 			const token = cookie.get('remember_token');
-			const res = await axios.get(`/api/users/info?token=${token}`, config);
+			const res = await axios.get(`${serverURL}/api/users/info?token=${token}`, config);
 			dispatch({
 				type: USER_LOADED,
 				payload: res.data.data
@@ -61,11 +61,11 @@ const AuthState = (props) => {
 
 	//TODO set cloudinary url in env
 	const uploadAvatar = async (e) => {
-		const cloudinaryURL = 'https://api.cloudinary.com/v1_1/sajicode/image/upload';
+		const cloudinaryURL = process.env.REACT_APP_CLOUDINARY_URL;
 		const files = e.target.files;
 		const data = new FormData();
 		data.append('file', files[0]);
-		data.append('upload_preset', 'revbook');
+		data.append('upload_preset', process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET);
 
 		try {
 			const res = await fetch(cloudinaryURL, {
@@ -91,11 +91,12 @@ const AuthState = (props) => {
 		const config = {
 			headers: {
 				'Content-Type': 'application/json'
-			}
+			},
+			withCredentials: true,
 		};
 
 		try {
-			const res = await axios.post(`/api/users/signup`, formData, config);
+			const res = await axios.post(`${serverURL}/api/users/signup`, formData, config);
 
 			dispatch({
 				type: REGISTER_SUCCESS,
@@ -115,11 +116,12 @@ const AuthState = (props) => {
 		const config = {
 			headers: {
 				'Content-Type': 'application/json'
-			}
+			},
+			withCredentials: true,
 		};
 
 		try {
-			const res = await axios.post(`/api/users/login`, formData, config);
+			const res = await axios.post(`${serverURL}/api/users/login`, formData, config);
 
 			cookie.set('remember_token', res.data.data.remember, { path: '/' });
 			dispatch({
@@ -140,11 +142,12 @@ const AuthState = (props) => {
 		const config = {
 			headers: {
 				'Content-Type': 'application/json'
-			}
+			},
+				withCredentials: true,
 		};
 
 		try {
-			const res = await axios.post(`/api/users/update/${id}`, formData, config);
+			const res = await axios.post(`${serverURL}/api/users/update/${id}`, formData, config);
 
 			cookie.set('remember_token', res.data.data.remember, { path: '/' });
 			dispatch({
@@ -163,7 +166,7 @@ const AuthState = (props) => {
 	//* Get a User
 	const getUser = async (id) => {
 		try {
-			const res = await axios.get(`/api/users/${id}`);
+			const res = await axios.get(`${serverURL}/api/users/${id}`, {withCredentials: true});
 			dispatch({
 				type: GET_USER,
 				payload: res.data.data
@@ -181,10 +184,11 @@ const AuthState = (props) => {
 		const config = {
 			headers: {
 				'Content-Type': 'application/json'
-			}
+			},
+				withCredentials: true,
 		};
 		try {
-			const res = await axios.post(`/api/users/forgot`, formData, config);
+			const res = await axios.post(`${serverURL}/api/users/forgot`, formData, config);
 			dispatch({
 				type: TRIGGER_SUCCESS,
 				payload: res.data.data.message
@@ -202,10 +206,11 @@ const AuthState = (props) => {
 		const config = {
 			headers: {
 				'Content-Type': 'application/json'
-			}
+			},
+				withCredentials: true,
 		};
 		try {
-			const res = await axios.post(`/api/users/reset?token=${token}`, formData, config);
+			const res = await axios.post(`${serverURL}/api/users/reset?token=${token}`, formData, config);
 			dispatch({
 				type: RESET_SUCCESS,
 				payload: res.data

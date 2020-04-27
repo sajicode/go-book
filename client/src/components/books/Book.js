@@ -17,11 +17,14 @@ const Book = (props) => {
 
 	console.log('Book ID', bookID);
 
-	useEffect(() => {
-		getBook(bookID);
-		getBookReviews(bookID);
+	useEffect(
+		() => {
+			getBook(bookID);
+			getBookReviews(bookID);
+		},
 		// eslint-disable-next-line
-	}, []);
+		[ props.history ]
+	);
 
 	//TODO fetch book data & book reviews
 

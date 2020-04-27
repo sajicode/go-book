@@ -20,8 +20,8 @@ const ForgotPassword = () => {
 				setAlert(message, 'success');
 				clearErrors();
 			}
-			// eslint-disable-next-line
 		},
+					// eslint-disable-next-line
 		[ error, message ]
 	);
 

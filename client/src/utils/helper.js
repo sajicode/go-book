@@ -1,2 +1,1 @@
-// export const serverURL = "https://revbook13420.herokuapp.com";
-export const serverURL = 'http://localhost:7300';
+export const serverURL = process.env.REACT_APP_SERVER_URL;

@@ -107,7 +107,7 @@ func main() {
 	fmt.Println("Starting Server on PORT " + appPort)
 
 	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Set-Cookie", "Cookie"})
-	originsOk := handlers.AllowedOrigins([]string{os.Getenv("ORIGIN_ALLOWED"), "https://revbook13420.herokuapp.com"})
+	originsOk := handlers.AllowedOrigins([]string{os.Getenv("ORIGIN_ALLOWED"), "https://revbook13420.herokuapp.com", "https://revbooks.netlify.app"})
 	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
 	credOk := handlers.AllowCredentials()
 

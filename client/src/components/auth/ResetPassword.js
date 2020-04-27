@@ -22,6 +22,7 @@ const ResetPassword = (props) => {
 				clearErrors();
 			}
 		},
+					// eslint-disable-next-line
 		[ error, isAuthenticated, props.history ]
 	);
 

@@ -17,6 +17,7 @@ const EditUserForm = ({ toggle }) => {
 				setAlert(error, 'danger');
 			}
 		},
+		// eslint-disable-next-line
 		[ error, authContext, userAvatar ]
 	);
 
