@@ -106,7 +106,7 @@ const AuthState = (props) => {
 		} catch (error) {
 			dispatch({
 				type: REGISTER_FAIL,
-				payload: error.response.data.message
+				payload: error.response.data.message || 'Internal Server error'
 			});
 		}
 	};
@@ -132,7 +132,7 @@ const AuthState = (props) => {
 		} catch (error) {
 			dispatch({
 				type: LOGIN_FAIL,
-				payload: error.response.data.message
+				payload: error.response.data.message || 'Internal Server error'
 			});
 		}
 	};
@@ -158,7 +158,7 @@ const AuthState = (props) => {
 		} catch (error) {
 			dispatch({
 				type: USER_LOAD_FAIL,
-				payload: error.response.data.message
+				payload: error.response.data.message || 'Internal Server error'
 			});
 		}
 	};
@@ -174,7 +174,7 @@ const AuthState = (props) => {
 		} catch (error) {
 			dispatch({
 				type: GET_USER_FAIL,
-				payload: error.response.data.message
+				payload: error.response.data.message || 'Internal Server error'
 			});
 		}
 	};
@@ -196,7 +196,7 @@ const AuthState = (props) => {
 		} catch (error) {
 			dispatch({
 				type: ALL_ERRORS,
-				payload: error.response.data.message
+				payload: error.response.data.message || 'Internal Server error'
 			});
 		}
 	};
@@ -218,7 +218,7 @@ const AuthState = (props) => {
 		} catch (error) {
 			dispatch({
 				type: ALL_ERRORS,
-				payload: error.response.data.message
+				payload: error.response.data.message || 'Internal Server error'
 			});
 		}
 	};
