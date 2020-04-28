@@ -54,7 +54,7 @@ const AuthState = (props) => {
 		} catch (error) {
 			dispatch({
 				type: USER_LOAD_FAIL,
-				payload: error.response.data.message
+				payload: error.response.data.message || 'Internal Server error'
 			});
 		}
 	};

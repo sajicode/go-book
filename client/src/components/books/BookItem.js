@@ -27,7 +27,7 @@ const BookItem = ({ book }) => {
 					<p>{summary}</p>
 					<p>
 						Posted By:{' '}
-						<Link to={`/user/${id}`}>
+						<Link to={`/user/${user.id}`}>
 							{user.first_name || authUser.first_name} {user.last_name || authUser.last_name}
 						</Link>{' '}
 						on <Moment>{created_at}</Moment>
