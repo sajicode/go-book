@@ -20,7 +20,7 @@ import {
 	RESET_SUCCESS
 } from '../types';
 import Cookies from 'universal-cookie';
-import { serverURL } from '../../utils/helper';
+import { serverURL, cloudinaryURL as cURL, cloudinaryUploadPreset } from '../../utils/helper';
 
 const cookie = new Cookies();
 
@@ -61,11 +61,11 @@ const AuthState = (props) => {
 
 	//TODO set cloudinary url in env
 	const uploadAvatar = async (e) => {
-		const cloudinaryURL = process.env.REACT_APP_CLOUDINARY_URL;
+		const cloudinaryURL = cURL;
 		const files = e.target.files;
 		const data = new FormData();
 		data.append('file', files[0]);
-		data.append('upload_preset', process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET);
+		data.append('upload_preset', cloudinaryUploadPreset);
 
 		try {
 			const res = await fetch(cloudinaryURL, {
