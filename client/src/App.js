@@ -29,7 +29,7 @@ const App = () => {
 						<Router>
 							<Fragment>
 								<Navbar />
-								<div>
+								<div className="container">
 									<Alerts />
 									<Switch>
 										<PrivateRoute exact path="/book/:id" component={Book} />

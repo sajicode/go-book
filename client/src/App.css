@@ -3,7 +3,7 @@
 /* Global Styles */
 :root {
 	--primary-color: #eeba6d;
-	--dark-color: #333333;
+	--dark-color: #282c34;
 	--light-color: #f4f4f4;
 	--danger-color: #dc3545;
 	--success-color: #28a745;
@@ -13,6 +13,10 @@
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
+}
+
+*, ::before, ::after {
+	box-sizing: inherit;
 }
 
 body {
@@ -42,10 +46,10 @@ img {
 
 /* Utilities */
 .container {
-	max-width: 1100px;
+	max-width: 100%;
 	margin: auto;
 	overflow: hidden;
-	padding: 0 2rem;
+	padding: 0 1rem;
 }
 
 /* Text Styles*/
@@ -92,6 +96,7 @@ img {
 
 .App {
 	text-align: center;
+	width: 100%;
 }
 
 .App-logo {
@@ -106,18 +111,14 @@ img {
 }
 
 .App-header {
-	background-color: #282c34;
-	min-height: 100vh;
+	background-color: white;
+	min-height: 80vh;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	font-size: calc(10px + 2vmin);
-	color: white;
-}
-
-.App-link {
-	color: #61dafb;
+	font-size: 5rem;
+	color: var(--dark-color);
 }
 
 /* Modal styles */

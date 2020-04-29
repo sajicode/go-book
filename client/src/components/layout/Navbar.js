@@ -1,6 +1,7 @@
-import React, { Fragment, useContext, useEffect } from 'react';
+import React, {  useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 import AuthContext from '../../context/auth/authContext';
 
 const Navbar = ({ title, icon }) => {
@@ -18,50 +19,51 @@ const Navbar = ({ title, icon }) => {
 	};
 
 	const authLinks = (
-		<Fragment>
-			<li>
+		<ListBox>
+			<NavBarLi>
 				<Link to="/home">Home</Link>
-			</li>
-			<li>
-				Hello {user && <Link to={`/user/${user.id}`}>{user.first_name}</Link>}
-				<span>
-					{user && (
-						<Link to={`/user/${user.id}`}>
-							<img src={user.avatar} alt={user.first_name + 'image'} height="40px" width="40px" />
-						</Link>
-					)}
-				</span>
-			</li>
-			<li>
+			</NavBarLi>
+			<NavBarLi>
 				<a onClick={onLogout} href="/">
 					<i className="fas fa-sign-out-alt" /> <span className="hide-sm">Logout</span>
 				</a>
-			</li>
-		</Fragment>
+			</NavBarLi>
+			<NavBarLi>
+				Hello {user && <Link to={`/user/${user.id}`}>{user.first_name}</Link>}	
+			</NavBarLi>
+			<div>		
+					{user && (
+						<Link to={`/user/${user.id}`}>
+							<Avatar src={user.avatar} alt={user.first_name + 'image'} />
+						</Link>
+					)}
+			</div>
+			
+		</ListBox>
 	);
 
 	const guestLinks = (
-		<Fragment>
-			<li>
+		<ListBox>
+			<NavBarLi>
 				<Link to="/home">Home</Link>
-			</li>
-			<li>
+			</NavBarLi>
+			<NavBarLi>
 				<Link to="/register">Register</Link>
-			</li>
-			<li>
+			</NavBarLi>
+			<NavBarLi>
 				<Link to="/login">Login</Link>
-			</li>
-		</Fragment>
+			</NavBarLi>
+		</ListBox>
 	);
 
 	return (
-		<div className="navbar bg-primary">
+		<NavBar>
 			<h1>
 				<i className={icon} />
 				<Link to="/">{title}</Link>
 			</h1>
-			<ul>{isAuthenticated ? authLinks : guestLinks}</ul>
-		</div>
+			<NavBarUl>{isAuthenticated ? authLinks : guestLinks}</NavBarUl>
+		</NavBar>
 	);
 };
 
@@ -74,5 +76,46 @@ Navbar.defaultProps = {
 	title: 'RevBooks',
 	icon: 'fas fa-id-card-alt'
 };
+
+const NavBar = styled.div`
+	display: flex;
+	position: sticky;
+	top: 0;
+	background: #eeba6d;
+	justify-content: space-between;
+	color: #282c34;
+	z-index: 1;
+	padding: 2rem;
+	height: 8vh;
+	max-width: 100%;
+`;
+
+const NavBarUl = styled.ul`
+	display: flex;
+	align-items: center;
+	list-style-type: none;
+`;
+
+const NavBarLi = styled.li`
+	display: block;
+	padding: .5rem 1rem;
+	font-size: 1.2rem;
+	cursor: pointer;
+
+	&:hover {
+		border-bottom: 1px solid black;
+	}
+`;
+
+const ListBox = styled.div`
+	display: flex;
+	flex-direction: row;
+`;
+
+const Avatar = styled.img`
+	height: 40px;
+	width: 40px;
+	padding-left: 1rem;
+`;
 
 export default Navbar;
