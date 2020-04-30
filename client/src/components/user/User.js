@@ -21,8 +21,8 @@ const User = (props) => {
 			if (error) {
 				setAlert(error, 'danger');
 			}
-			// eslint-disable-next-line
 		},
+					// eslint-disable-next-line
 		[ error, user ]
 	);
 

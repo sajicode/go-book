@@ -7,6 +7,8 @@
 	--light-color: #f4f4f4;
 	--danger-color: #dc3545;
 	--success-color: #28a745;
+	font-size: 10px;
+	align-content: center;
 }
 
 * {
@@ -23,8 +25,8 @@ body {
 	font-family: 'Roboto', sans-serif;
 	font-size: 1rem;
 	line-height: 1.6;
-	background-color: #fff;
-	color: #333;
+	background-color: var(--dark-color);
+	color: var(--primary-color);
 }
 
 a {
@@ -49,7 +51,7 @@ img {
 	max-width: 100%;
 	margin: auto;
 	overflow: hidden;
-	padding: 0 1rem;
+	padding: 0 2rem;
 }
 
 /* Text Styles*/
@@ -111,34 +113,35 @@ img {
 }
 
 .App-header {
-	background-color: white;
+	background-color:var(--dark-color);
 	min-height: 80vh;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 	font-size: 5rem;
-	color: var(--dark-color);
+	color: var(--light-color);
 }
 
 /* Modal styles */
 button {
-	padding: 0.5em 0.7em;
+	padding: 0.5rem 0.7rem;
 	border: 1px solid #8d8d8d;
-	background-color: white;
-	font-size: 1em;
+	background-color: var(--primary-color);
+	font-size: 1rem;
+	border-radius: .5rem;
 	cursor: pointer;
 }
 
 .top-banner {
-	padding: 1em 0;
-	background-color: #ffd698;
+	padding: 2rem 0;
 }
 
 .top-banner-inner {
 	width: 80%;
 	max-width: 1000px;
 	margin: 0 auto;
+	text-align: center;
 }
 
 .modal-backdrop {
@@ -252,5 +255,12 @@ button {
 	}
 	to {
 		transform: rotate(360deg);
+	}
+}
+
+@media only screen and (max-width: 500px) {
+	body {
+		background-color: var(--dark-color);
+		color: var(--primary-color);
 	}
 }

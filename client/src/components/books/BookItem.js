@@ -1,6 +1,7 @@
 import React, { useContext, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import moment from 'moment/min/moment-with-locales';
 import Moment from 'react-moment';
 import AuthContext from '../../context/auth/authContext';
@@ -17,14 +18,14 @@ const BookItem = ({ book }) => {
 	return (
 		<Fragment>
 			{isAuthenticated ? (
-				<div>
+				<BookItemStyle>
 					<Link to={`/book/${id}`}>
-						<h1>{title}</h1>
+						<BookTitle>{title}</BookTitle>
 						<img src={image} alt={title} width="300" height="480" />
 					</Link>
-					<h2>{author}</h2>
-					<h3>{category}</h3>
-					<p>{summary}</p>
+					<h2>Author: {author}</h2>
+					<h3>Category: {category}</h3>
+					<BookSummary>{summary.slice(0, 150)}...</BookSummary>
 					<p>
 						Posted By:{' '}
 						<Link to={`/user/${user.id}`}>
@@ -32,19 +33,19 @@ const BookItem = ({ book }) => {
 						</Link>{' '}
 						on <Moment>{created_at}</Moment>
 					</p>
-				</div>
+				</BookItemStyle>
 			) : (
-				<div>
-					<h1>{title}</h1>
+				<BookItemStyle>
+					<BookTitle>{title}</BookTitle>
 					<img src={image} alt={title} width="300" height="480" />
-					<h2>{author}</h2>
-					<h3>{category}</h3>
-					<p>{summary}</p>
+					<h2>Author: {author}</h2>
+					<h3>Category: {category}</h3>
+					<BookSummary>{summary}</BookSummary>
 					<p>
 						Posted By: {user.first_name || authUser.first_name} {user.last_name || authUser.last_name} on{' '}
 						<Moment>{created_at}</Moment>
 					</p>
-				</div>
+				</BookItemStyle>
 			)}
 		</Fragment>
 	);
@@ -53,5 +54,21 @@ const BookItem = ({ book }) => {
 BookItem.propTypes = {
 	book: PropTypes.object.isRequired
 };
+
+const BookTitle = styled.h1`
+	text-align: center;
+	color: #eeba6d;
+`;
+
+const BookItemStyle = styled.div`
+	display: grid;
+	justify-items: center;
+`;
+
+const BookSummary = styled.p`
+	font-size: 1.2rem;
+	color: #fff;
+	padding: 0 2rem;
+`;
 
 export default BookItem;

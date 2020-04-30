@@ -102,7 +102,7 @@ const NavBarLi = styled.li`
 	font-size: 1.2rem;
 	cursor: pointer;
 
-	&:hover {
+	*:hover {
 		border-bottom: 1px solid black;
 	}
 `;

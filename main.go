@@ -97,6 +97,7 @@ func main() {
 	api.HandleFunc("/books/{id:[0-9]+}/review", userMw.ApplyFn(reviewsController.Create)).Methods("POST")
 	api.HandleFunc("/books/{id:[0-9]+}/reviews", userMw.ApplyFn(reviewsController.GetBookReviews)).Methods("GET")
 
+	// serve static files & frontend
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./client/build/static/"))))
 
 	r.PathPrefix("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

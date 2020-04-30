@@ -28,7 +28,7 @@ const App = () => {
 					<AlertState>
 						<Router>
 							<Fragment>
-								<Navbar />
+								<Navbar title="RB" />
 								<div className="container">
 									<Alerts />
 									<Switch>
