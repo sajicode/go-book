@@ -20,7 +20,7 @@ const BookDetails = ({ book: { title, image, author, category, summary, user, cr
 				<div>
 					<ImageStyle src={image} alt={title} width="300" height="400" />
 				</div>
-				<div className="">
+				<BookInfo>
 					<BookTitle>Author: {author}</BookTitle>
 				<CategoryStyle>Category: {category}</CategoryStyle>
 				<BookSummary>{summary}</BookSummary>
@@ -33,7 +33,7 @@ const BookDetails = ({ book: { title, image, author, category, summary, user, cr
 					</Link>{' '}
 					on <Moment>{created_at}</Moment>
 				</BookPoster>
-				</div>
+				</BookInfo>
 			</BookDetailStyle>
 		</div>
 		
@@ -73,6 +73,10 @@ const ImageStyle = styled.img`
 		width: 80%;
 		height: 120;
 	}
+`;
+
+const BookInfo = styled.div`
+	padding: 0 2rem;
 `;
 
 const BookDetailStyle = styled.div`
