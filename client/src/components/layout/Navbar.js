@@ -86,7 +86,7 @@ const NavBar = styled.div`
 	color: #282c34;
 	z-index: 1;
 	padding: 2rem;
-	height: 8vh;
+	height: 4vh;
 	max-width: 100%;
 `;
 
@@ -100,6 +100,7 @@ const NavBarLi = styled.li`
 	display: block;
 	padding: .5rem 1rem;
 	font-size: 1.2rem;
+	font-weight: bold;
 	cursor: pointer;
 
 	*:hover {

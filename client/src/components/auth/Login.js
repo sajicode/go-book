@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 import AuthContext from '../../context/auth/authContext';
 import AlertContext from '../../context/alert/alertContext';
 
@@ -49,18 +50,18 @@ const Login = (props) => {
 	};
 
 	return (
-		<div className="form-container">
-			<h1>
-				Account <span className="text-primary">Login</span>
-			</h1>
-			<form onSubmit={onSubmit}>
-				<div className="form-group">
-					<label htmlFor="email">Email</label>
-					<input type="email" name="email" value={email} onChange={onChange} required />
-				</div>
-				<div className="form-group">
-					<label htmlFor="password">Password</label>
-					<input
+		<FormContainer>
+			<FormTitle>
+				User Login
+			</FormTitle>
+			<FormStyle onSubmit={onSubmit}>
+				<FormGroup>
+					<FormLabel htmlFor="email">Email</FormLabel>
+					<FormInput type="email" name="email" value={email} onChange={onChange} required />
+				</FormGroup>
+				<FormGroup>
+					<FormLabel htmlFor="password">Password</FormLabel>
+					<FormInput
 						type="password"
 						name="password"
 						value={password}
@@ -68,15 +69,76 @@ const Login = (props) => {
 						required
 						minLength="8"
 					/>
-				</div>
-				<input type="submit" value="Login" className="btn btn-primary btn-block" />
-			</form>
+				</FormGroup>
+				<SubmitButton type="submit" value="Login" />
+			</FormStyle>
 
-			<div className="forgot-link">
-				Forgot Password ? <Link to="/forgot">Click here to reset</Link>
-			</div>
-		</div>
+			<ForgotLink>
+				Forgot Password ? <Link to="/forgot">
+					<ForgotClick>
+						Click here to reset
+					</ForgotClick>
+				</Link>
+			</ForgotLink>
+		</FormContainer>
 	);
 };
+
+const FormContainer = styled.div`
+	max-width: 500px;
+  margin: 2rem auto;
+  overflow: hidden;
+	padding: 0 2rem;
+	text-align: center;
+`;
+
+const FormTitle = styled.h1`
+	text-align: center;
+	margin-bottom: 2rem;
+`;
+
+const FormGroup = styled.div`
+	display: flex;
+	flex-direction: row;
+	align-content: center;
+	justify-content: space-between;
+	margin-bottom: 2rem;
+	width: 80%;
+`;
+
+const FormInput = styled.input`
+	width: 70%;
+	height: 3rem;
+	border-radius: .5rem;
+`;
+
+const FormLabel = styled.label`
+	font-size: 1.5rem;
+`;
+
+const FormStyle = styled.form`
+	padding: 2rem;
+`;
+
+const SubmitButton = styled.input`
+	width: 80%;
+	height: 3rem;
+	font-size: 2rem;
+	background-color: #eeba6d;
+	border-radius: .5rem;
+	cursor: pointer;
+`;
+
+const ForgotLink = styled.div`
+	font-size: 1.5rem;
+`;
+
+const ForgotClick = styled.span`
+	color: #eeba6d;
+
+	&:hover {
+		color: #fff;
+	}
+`;
 
 export default Login;

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
 
 /* Global Styles */
 :root {
@@ -161,7 +161,7 @@ button {
 	right: 20%;
 	left: 20%;
 	padding: 2em 3em;
-	background-color: white;
+	background-color: var(--dark-color);
 	overflow: auto;
 	z-index: 2;
 }
@@ -259,6 +259,10 @@ button {
 }
 
 @media only screen and (max-width: 500px) {
+	:root {
+		font-size: 8px;
+	}
+
 	body {
 		background-color: var(--dark-color);
 		color: var(--primary-color);

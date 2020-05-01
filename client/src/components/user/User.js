@@ -1,4 +1,5 @@
 import React, { useContext, Fragment, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import AuthContext from '../../context/auth/authContext';
 import AlertContext from '../../context/alert/alertContext';
 import UserDetails from './UserDetails';
@@ -41,7 +42,7 @@ const User = (props) => {
 							<header className="top-banner">
 								<div className="top-banner-inner">
 									<p>
-										<button onClick={() => toggleForm(true)}>Update your details</button>
+										<ButtonStyle onClick={() => toggleForm(true)}>Update your details</ButtonStyle>
 									</p>
 								</div>
 							</header>
@@ -57,5 +58,12 @@ const User = (props) => {
 		</Fragment>
 	);
 };
+
+const ButtonStyle = styled.button`
+	width: 30rem;
+	height: 5rem;
+	font-size: 2rem;
+	margin-right: 7rem;
+`;
 
 export default User;

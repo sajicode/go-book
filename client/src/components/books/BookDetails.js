@@ -18,7 +18,7 @@ const BookDetails = ({ book: { title, image, author, category, summary, user, cr
 			<BookTitle>{title}</BookTitle>
 			<BookDetailStyle>
 				<div>
-					<ImageStyle src={image} alt={title} width="400" height="540" />
+					<ImageStyle src={image} alt={title} width="300" height="400" />
 				</div>
 				<div className="">
 					<BookTitle>Author: {author}</BookTitle>
