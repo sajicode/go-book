@@ -29,7 +29,9 @@ const BookItem = ({ book }) => {
 					<p>
 						Posted By:{' '}
 						<Link to={`/user/${user.id}`}>
-							{user.first_name || authUser.first_name} {user.last_name || authUser.last_name}
+							<Poster>
+								{user.first_name || authUser.first_name} {user.last_name || authUser.last_name}
+						</Poster>
 						</Link>{' '}
 						on <Moment>{created_at}</Moment>
 					</p>
@@ -42,7 +44,9 @@ const BookItem = ({ book }) => {
 					<h3>Category: {category}</h3>
 					<BookSummary>{summary}</BookSummary>
 					<p>
-						Posted By: {user.first_name || authUser.first_name} {user.last_name || authUser.last_name} on{' '}
+							Posted By: <Poster>
+								{user.first_name || authUser.first_name} {user.last_name || authUser.last_name}
+						</Poster> on{' '}
 						<Moment>{created_at}</Moment>
 					</p>
 				</BookItemStyle>
@@ -69,6 +73,14 @@ const BookSummary = styled.p`
 	font-size: 1.2rem;
 	color: #fff;
 	padding: 0 2rem;
+`;
+
+const Poster = styled.span`
+	color: #eeba6d;
+
+	&:hover {
+		color: #fff;
+	}
 `;
 
 export default BookItem;
