@@ -42,7 +42,7 @@ const BookItem = ({ book }) => {
 					<img src={image} alt={title} width="300" height="480" />
 					<h2>Author: {author}</h2>
 					<h3>Category: {category}</h3>
-					<BookSummary>{summary}</BookSummary>
+					<BookSummary>{summary.slice(0, 150)}...</BookSummary>
 					<p>
 							Posted By: <Poster>
 								{user.first_name || authUser.first_name} {user.last_name || authUser.last_name}
