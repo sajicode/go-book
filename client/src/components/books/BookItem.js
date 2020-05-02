@@ -23,8 +23,8 @@ const BookItem = ({ book }) => {
 						<BookTitle>{title}</BookTitle>
 						<img src={image} alt={title} width="300" height="480" />
 					</Link>
-					<h2>Author: {author}</h2>
-					<h3>Category: {category}</h3>
+					<h2>{author}</h2>
+					<h3>{category}</h3>
 					<BookSummary>{summary.slice(0, 150)}...</BookSummary>
 					<p>
 						Posted By:{' '}
@@ -40,8 +40,8 @@ const BookItem = ({ book }) => {
 				<BookItemStyle>
 					<BookTitle>{title}</BookTitle>
 					<img src={image} alt={title} width="300" height="480" />
-					<h2>Author: {author}</h2>
-					<h3>Category: {category}</h3>
+					<h2>{author}</h2>
+					<h3>{category}</h3>
 					<BookSummary>{summary.slice(0, 150)}...</BookSummary>
 					<p>
 							Posted By: <Poster>
@@ -71,7 +71,7 @@ const BookItemStyle = styled.div`
 	flex-direction: column;
 
 	& > * {
-		padding: 1.5rem 0;
+		padding: 1rem 0;
 	}
 `;
 
