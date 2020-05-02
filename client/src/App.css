@@ -267,4 +267,11 @@ button {
 		background-color: var(--dark-color);
 		color: var(--primary-color);
 	}
+
+	.modal-body {
+		height: 70vh;
+		width: 80vw;
+		right: 50%;
+		left: 5%;
+	}
 }

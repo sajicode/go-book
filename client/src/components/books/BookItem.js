@@ -62,11 +62,17 @@ BookItem.propTypes = {
 const BookTitle = styled.h1`
 	text-align: center;
 	color: #eeba6d;
+	margin-bottom: 1rem;
 `;
 
 const BookItemStyle = styled.div`
-	display: grid;
-	justify-items: center;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+
+	& > * {
+		padding: 1.5rem 0;
+	}
 `;
 
 const BookSummary = styled.p`
